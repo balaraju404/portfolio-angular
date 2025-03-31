@@ -1,2 +1,5 @@
-@use "./flex.scss";
-@use "./grid.scss";
+@use "./flex";
+@use "./grid";
+@use "./mixins";
+@use "./border";
+@use "./fonts";
