@@ -31,3 +31,21 @@ $colors: (
  teal: #0097a7,
  tealDark: #00898f
 );
+
+@each $color, $value in $colors {
+ #body {
+  .text-#{$color} {
+   color: $value;
+  }
+ }
+}
+
+$alignments: left, center, right, justify;
+
+@each $alignment in $alignments {
+ #body {
+  .text-#{$alignment} {
+   text-align: $alignment;
+  }
+ }
+}

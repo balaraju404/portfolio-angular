@@ -3,3 +3,11 @@
 @use "./mixins";
 @use "./border";
 @use "./fonts";
+@use "./padding";
+@use "./margin";
+
+#body {
+ .c-pointer {
+  cursor: pointer;
+ }
+}
