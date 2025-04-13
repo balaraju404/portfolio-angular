@@ -1,0 +1,6 @@
+@use "../helpers/mixins.scss" as mixin;
+
+.login-container {
+ @include mixin.flexLayout(column, center, stretch, wrap);
+ width: 100%;
+}

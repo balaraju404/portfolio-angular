@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
-import { ButtonModel, TextfieldModel } from '@balaraju404/custom-components';
+import { ButtonComponent, ButtonModel, TextFieldComponent, TextfieldModel } from '@balaraju404/custom-components';
 
 @Component({
  selector: 'app-login',
- imports: [],
+ imports: [TextFieldComponent, ButtonComponent],
  templateUrl: './login.component.html',
  styleUrls: []
 })

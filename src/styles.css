@@ -570,7 +570,7 @@
   display: flex;
   flex-direction: flex;
   justify-content: start;
-  align-items: start;
+  align-items: center;
   flex-wrap: wrap;
   column-gap: 0.5rem;
 }
@@ -595,11 +595,17 @@
 .main-content-container {
   display: flex;
   flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  flex-wrap: nowrap;
+  justify-content: start;
+  align-items: start;
+  flex-wrap: wrap;
   width: 100vw;
   height: 80vh;
+  max-height: 80vh;
+  overflow-x: scroll;
+}
+.main-content-container > * {
+  display: contents;
+  width: 100%;
 }
 
 .footer-container {
@@ -612,6 +618,15 @@
   color: #fff;
   width: 100vw;
   height: 10vh;
+}
+
+.login-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: stretch;
+  flex-wrap: wrap;
+  width: 100%;
 }
 
 :root {

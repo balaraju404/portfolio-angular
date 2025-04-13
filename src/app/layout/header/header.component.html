@@ -4,6 +4,6 @@
   @for (item of tabsList; track $index) {
   <div class="tab-item" [class.active]="selectedTab['link']==item['link']" (click)="navigateToRoute(item)">{{item.name}}</div>
   }
-  <lib-button [btn_mdl]="btn_mdl_login"></lib-button>
+  <lib-button [btn_mdl]="btn_mdl_login"  (click)="navigateToRoute({link:'login'})"></lib-button>
  </div>
 </div>
