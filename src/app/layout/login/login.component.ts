@@ -19,6 +19,8 @@ export class LoginComponent {
   this.tf_mdl_username = new TextfieldModel(1, "User Name", "Enter your username")
   this.tf_mdl_pwd = new TextfieldModel(2, "Password", "Enter your password", InputType.Password)
   this.btn_mdl_login = new ButtonModel(3, "Login")
+  this.btn_mdl_login.customClass = "btn-dark text-bold"
   this.btn_mdl_login_otp = new ButtonModel(4, "Login with OTP")
+  this.btn_mdl_login_otp.customClass = "btn-muted text-bold"
  }
 }

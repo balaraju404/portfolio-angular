@@ -34,7 +34,7 @@ $colors: (
 
 @each $color, $value in $colors {
  #body {
-  .text-#{$color} {
+  .text-#{""+$color} {
    color: $value;
   }
  }

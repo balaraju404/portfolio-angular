@@ -1225,6 +1225,99 @@
 #body .c-pointer {
   cursor: pointer;
 }
+#body .text-bold {
+  font-weight: bold;
+}
+
+lib-button button.btn-dark {
+  background: #171e25;
+  color: #ffffff;
+  border: 1px solid #171e25;
+  transition: background 0.3s, color 0.3s;
+}
+lib-button button.btn-dark:hover {
+  background: rgb(31.625, 41.25, 50.875);
+}
+
+lib-button button.btn-light {
+  background: #f7f7f7;
+  color: #171e25;
+  border: 1px solid #f7f7f7;
+  transition: background 0.3s, color 0.3s;
+}
+lib-button button.btn-light:hover {
+  background: rgb(234.65, 234.65, 234.65);
+}
+
+lib-button button.btn-primary {
+  background: #1d4ed8;
+  color: #ffffff;
+  border: 1px solid #1d4ed8;
+  transition: background 0.3s, color 0.3s;
+}
+lib-button button.btn-primary:hover {
+  background: rgb(33.0489795918, 83.3989795918, 225.2010204082);
+}
+
+lib-button button.btn-secondary {
+  background: #6b7280;
+  color: #ffffff;
+  border: 1px solid #6b7280;
+  transition: background 0.3s, color 0.3s;
+}
+lib-button button.btn-secondary:hover {
+  background: rgb(113.2606382979, 120.670212766, 135.4893617021);
+}
+
+lib-button button.btn-success {
+  background: #10b981;
+  color: #ffffff;
+  border: 1px solid #10b981;
+  transition: background 0.3s, color 0.3s;
+}
+lib-button button.btn-success:hover {
+  background: rgb(17.2298507463, 199.2201492537, 138.9156716418);
+}
+
+lib-button button.btn-warning {
+  background: #f59e0b;
+  color: #ffffff;
+  border: 1px solid #f59e0b;
+  transition: background 0.3s, color 0.3s;
+}
+lib-button button.btn-warning:hover {
+  background: rgb(233.6251968504, 150.3244094488, 9.5748031496);
+}
+
+lib-button button.btn-danger {
+  background: #ef4444;
+  color: #ffffff;
+  border: 1px solid #ef4444;
+  transition: background 0.3s, color 0.3s;
+}
+lib-button button.btn-danger:hover {
+  background: rgb(237.7901477833, 53.8598522167, 53.8598522167);
+}
+
+lib-button button.btn-info {
+  background: #0ea5e9;
+  color: #ffffff;
+  border: 1px solid #0ea5e9;
+  transition: background 0.3s, color 0.3s;
+}
+lib-button button.btn-info:hover {
+  background: rgb(19.3115384615, 172.0538461538, 240.8384615385);
+}
+
+lib-button button.btn-muted {
+  background: #f5f5f5;
+  color: #1f2937;
+  border: 1px solid #e0e3e7;
+  transition: background 0.3s, color 0.3s;
+}
+lib-button button.btn-muted:hover {
+  background: rgb(232.75, 232.75, 232.75);
+}
 
 .card {
   background: #fff;
