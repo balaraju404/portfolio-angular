@@ -1,19 +1,28 @@
-<div class="login-container">
- <div class="col-xs-12 col-xl-4">
-  <div class="card default">
-   <div class="card-header pb-0">
-    <h2 class="text-black text-center">Login</h2>
+<div class="flex items-center justify-center  p-6">
+ <div class="w-full max-w-md">
+  <div class="bg-white shadow-xl rounded-2xl overflow-hidden">
+   <div class="px-6 py-5 border-b border-gray-100">
+    <h2 class="text-2xl font-semibold text-gray-900 text-center">Login</h2>
    </div>
-   <div class="card-body">
-    <div class="d-flex flex-column row-gap-2">
-     <lib-textfield placeholder="Enter login name" [(value)]="formData.login_name"></lib-textfield>
-     <lib-textfield placeholder="Enter password" [(value)]="formData.password"></lib-textfield>
-     <button (click)="onClickLogin()">Login</button>
-     <div class="col-xs-12 d-flex justify-space-between">
-      <span class="c-pointer">Forgot Password?</span>
-      <span class="c-pointer">Create Account</span>
+   <div class="px-6 py-8">
+    <div class="flex flex-col gap-4">
+     <lib-textfield class="w-full block" placeholder="Enter login name" [(value)]="formData.login_name"></lib-textfield>
+
+     <lib-textfield class="w-full block" type="password" placeholder="Enter password"
+      [(value)]="formData.password"></lib-textfield>
+
+     <button (click)="onClickLogin()"
+      class="w-full bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 text-white font-medium py-2.5 rounded-lg shadow-sm transition-colors duration-150">
+      Login
+     </button>
+
+     <div class="flex items-center justify-between text-sm text-gray-600">
+      <span class="c-pointer hover:text-indigo-600 transition-colors">Forgot Password?</span>
+      <span class="c-pointer hover:text-indigo-600 transition-colors">Create Account</span>
      </div>
-     <!-- <lib-button [btn_mdl]="btn_mdl_login_otp"></lib-button> -->
+
+     <!-- optional: place for additional action buttons -->
+     <!-- <lib-button class="w-full" [btn_mdl]="btn_mdl_login_otp"></lib-button> -->
     </div>
    </div>
   </div>

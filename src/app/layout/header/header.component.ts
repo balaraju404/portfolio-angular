@@ -1,14 +1,16 @@
-import { Component, inject } from '@angular/core';
-import { Router } from '@angular/router';
-import { ButtonComponent, ButtonModel } from '@balaraju404/custom-components';
+import { Component, inject, OnDestroy } from "@angular/core"
+import { Router, NavigationEnd } from "@angular/router"
+import { ButtonComponent } from "../../shared/button/button.component"
+import { CommonModule } from "@angular/common"
+import { Subscription } from "rxjs"
 
 @Component({
- selector: 'app-header',
- imports: [ButtonComponent],
- templateUrl: './header.component.html',
+ selector: "app-header",
+ imports: [CommonModule, ButtonComponent],
+ templateUrl: "./header.component.html",
  styleUrls: []
 })
-export class HeaderComponent {
+export class HeaderComponent implements OnDestroy {
  private readonly router = inject(Router)
  tabsList: any = [
   { "name": "Home", "link": "home" },
@@ -17,17 +19,36 @@ export class HeaderComponent {
   { "name": "Contact Us", "link": "contactus" },
  ]
  selectedTab: any = {}
- btn_mdl_login!: ButtonModel
- ngOnInit() {
-  this.selectedTab = this.tabsList[0];
-  this.setupFields()
- }
- setupFields() {
-  this.btn_mdl_login = new ButtonModel(1, "Login");
- }
- navigateToRoute(item: any) {
-  this.selectedTab = item;
-  this.router.navigate(["layout", item.link])
+ // Mobile menu state
+ mobileOpen = false
 
+ // subscription to auto-close mobile menu on navigation
+ private routerEventsSub?: Subscription
+
+ ngOnInit() {
+  this.selectedTab = this.tabsList[0]
+
+  // Close mobile menu automatically when navigation finishes
+  this.routerEventsSub = this.router.events.subscribe((event) => {
+   if (event instanceof NavigationEnd) {
+    this.mobileOpen = false
+   }
+  })
+ }
+
+ // toggle helper (optional, template currently toggles property directly)
+ toggleMobile() {
+  this.mobileOpen = !this.mobileOpen
+ }
+
+ navigateToRoute(item: any) {
+  this.selectedTab = item
+  // ensure mobile menu closes after navigation
+  this.mobileOpen = false
+  this.router.navigate(["layout", item.link])
+ }
+
+ ngOnDestroy() {
+  this.routerEventsSub?.unsubscribe()
  }
 }

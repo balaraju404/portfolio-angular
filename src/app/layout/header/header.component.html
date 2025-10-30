@@ -1,9 +1,50 @@
-<div class="header-container">
- <h2 class="fs8">Balaraju Gandham</h2>
- <div class="tabs">
-  @for (item of tabsList; track $index) {
-  <div class="tab-item" [class.active]="selectedTab['link']==item['link']" (click)="navigateToRoute(item)">{{item.name}}</div>
-  }
-  <lib-button [btn_mdl]="btn_mdl_login"  (click)="navigateToRoute({link:'login'})"></lib-button>
+<nav class="bg-white/80 backdrop-blur-sm sticky top-0 z-50 border-b border-gray-200">
+ <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+  <div class="flex items-center justify-between h-16">
+   <div class="flex items-center space-x-4">
+    <p class="text-lg sm:text-2xl font-semibold tracking-tight text-gray-900">Portfolio</p>
+
+    <!-- Desktop tabs -->
+    <div class="hidden md:flex md:items-center md:space-x-2">
+     @for (item of tabsList; track $index) {
+     <button type="button" (click)="navigateToRoute(item)"
+      [attr.aria-current]="selectedTab?.link === item.link ? 'page' : null"
+      class="px-3 py-2 rounded-md text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 hover:bg-gray-100"
+      [ngClass]="selectedTab?.link === item.link ? 'text-indigo-600 bg-indigo-50' : 'text-gray-700'">
+      {{ item.name }}
+     </button>
+     }
+    </div>
+   </div>
+
+   <div class="flex items-center space-x-3">
+    <!-- Primary action -->
+    <lib-button class="hidden sm:inline-flex" label="Login" (clicked)="navigateToRoute({link:'login'})"></lib-button>
+
+    <!-- Mobile menu toggle -->
+    <button
+     class="md:hidden inline-flex items-center justify-center p-2 rounded-md text-gray-700 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+     (click)="mobileOpen = !mobileOpen" [attr.aria-expanded]="mobileOpen">
+     <span *ngIf="!mobileOpen">Menu</span>
+     <span *ngIf="mobileOpen">Close</span>
+    </button>
+   </div>
+  </div>
  </div>
-</div>
+
+ <!-- Mobile dropdown -->
+ <div class="md:hidden" *ngIf="mobileOpen">
+  <div class="px-4 pb-4 space-y-1">
+   <button *ngFor="let item of tabsList" (click)="navigateToRoute(item); mobileOpen = false"
+    class="w-full text-left px-3 py-2 rounded-md text-base font-medium transition-colors hover:bg-gray-100"
+    [ngClass]="selectedTab?.link === item.link ? 'text-indigo-600 bg-indigo-50' : 'text-gray-700'">
+    {{ item.name }}
+   </button>
+
+   <button (click)="navigateToRoute({link:'login'}); mobileOpen = false"
+    class="w-full text-left px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-100">
+    Login
+   </button>
+  </div>
+ </div>
+</nav>

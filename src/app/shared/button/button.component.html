@@ -1,1 +1,9 @@
-<p>button works!</p>
+<button [disabled]="disabled" [ngClass]="buttonClass" (click)="onClick($event)">
+ <!-- Icon (optional) -->
+ @if (icon) {
+ <i [class]="icon"></i>
+ }
+
+ <!-- Label -->
+ <span>{{ label }}</span>
+</button>
