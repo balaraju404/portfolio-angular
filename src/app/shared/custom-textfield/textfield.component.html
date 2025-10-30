@@ -1,0 +1,15 @@
+<div [ngClass]="mainClass">
+ <!-- Label -->
+ @if (label.length) {
+ <div [ngClass]="labelContainerClass">
+  <label [ngClass]="labelClass">{{ label }}</label>
+  @if (showRequired) {
+  <span [ngClass]="requiredClass">*</span>
+  }
+ </div>
+ }
+
+ <!-- Input -->
+ <input type="text" [placeholder]="placeholder" [readonly]="readonly" [disabled]="disabled" [ngClass]="inputClass"
+  [value]="value" (input)="onValueChange($event)" />
+</div>
