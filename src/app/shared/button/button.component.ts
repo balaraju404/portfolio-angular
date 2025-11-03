@@ -5,11 +5,11 @@ import { Component, EventEmitter, Input, Output } from "@angular/core"
  selector: "lib-button",
  imports: [CommonModule],
  templateUrl: "./button.component.html",
- styleUrls: ["./button.component.css"],
+ styleUrls: ["./button.component.scss"],
 })
 export class ButtonComponent {
  /** Text shown on the button */
- @Input() label: string = "Button"
+ @Input() label: string = ""
 
  /** Whether button is disabled */
  @Input() disabled: boolean = false
@@ -41,7 +41,7 @@ export class ButtonComponent {
 
  /** Computed Tailwind classes for variants */
  get buttonClass(): string {
-  const base = "inline-flex items-center justify-center gap-2 rounded-lg px-4 py-2 text-sm font-medium focus:outline-none transition duration-150 ease-in-out"
+  const base = "inline-flex items-center justify-center gap-2 rounded-lg px-4 py-2 text-sm font-medium cursor-pointer focus:outline-none transition duration-150 ease-in-out"
 
   const variants: Record<string, string> = {
    primary: "bg-blue-600 text-white hover:bg-blue-700",
