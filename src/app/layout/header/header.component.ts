@@ -3,6 +3,7 @@ import { Router, NavigationEnd } from "@angular/router"
 import { ButtonComponent } from "../../shared/button/button.component"
 import { CommonModule } from "@angular/common"
 import { Subscription } from "rxjs"
+import { APP_ROUTES } from "@constants/route.constants"
 
 @Component({
  selector: "app-header",
@@ -45,7 +46,7 @@ export class HeaderComponent implements OnDestroy {
   this.selectedTab = item
   // ensure mobile menu closes after navigation
   this.mobileOpen = false
-  this.router.navigate(["layout", item.link])
+  this.router.navigate([APP_ROUTES.layout, item.link])
  }
 
  ngOnDestroy() {

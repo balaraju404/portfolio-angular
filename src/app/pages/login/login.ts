@@ -1,18 +1,18 @@
-import { Component, inject } from "@angular/core"
-import { TextfieldComponent } from "../../shared/textfield/textfield.component"
-import { ButtonComponent } from "../../shared/button/button.component"
-import { ApiHandlingService } from "../../shared/services/api-handling.service"
-import { Constants } from "../../shared/services/constants.service"
-import { LSHelperService } from "../../shared/services/ls-helper.service"
-import { Router } from "@angular/router"
+import { Component, inject } from '@angular/core';
+import { TextfieldComponent } from '../../shared/textfield/textfield.component';
+import { ButtonComponent } from '../../shared/button/button.component';
+import { ApiHandlingService } from '../../shared/services/api-handling.service';
+import { Router } from '@angular/router';
+import { Constants } from '../../shared/services/constants.service';
+import { LSHelperService } from '../../shared/services/ls-helper.service';
+import { APP_ROUTES } from '@constants/route.constants';
 
 @Component({
- selector: "app-login",
+ selector: 'app-login',
  imports: [TextfieldComponent, ButtonComponent],
- templateUrl: "./login.component.html",
- styleUrls: []
+ templateUrl: './login.html'
 })
-export class LoginComponent {
+export class Login {
  private readonly apiService = inject(ApiHandlingService)
  private readonly router = inject(Router)
 
@@ -53,8 +53,9 @@ export class LoginComponent {
    }
   })
  }
+
  hanldeLoginSucess(data: any) {
   LSHelperService.setItem(Constants.LS_TOKEN_KEY, data)
-  this.router.navigate(["layout/home"])
+  this.router.navigate([APP_ROUTES.layout])
  }
 }
