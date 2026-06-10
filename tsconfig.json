@@ -10,6 +10,9 @@
    ],
    "@core/*": [
     "src/app/core/*"
+   ],
+   "@shared/*": [
+    "src/app/shared/*"
    ]
   },
   "rootDir": "src",

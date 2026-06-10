@@ -32,8 +32,9 @@
        }
       ],
       "styles": [
-       "src/output.css",
-       "node_modules/@fortawesome/fontawesome-free/css/all.css"
+       "node_modules/@fortawesome/fontawesome-free/css/all.css",
+       "src/styles/main.scss",
+       "src/styles/output.css"
       ],
       "scripts": []
      },

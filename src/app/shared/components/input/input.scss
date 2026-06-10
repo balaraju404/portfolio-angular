@@ -1,0 +1,74 @@
+:host {
+ display: inline-block;
+
+ /* Typography */
+ --input-font-family: inherit;
+ --input-font-size: 0.875rem;
+ --input-font-weight: 400;
+ --input-line-height: 1.5;
+
+ /* Spacing */
+ --input-padding-inline: 0.75rem;
+ --input-padding-block: 0.5rem;
+
+ /* Appearance */
+ --input-background: var(--color-white);
+ --input-color: var(--color-black);
+ --input-border-width: 1px;
+ --input-border-style: solid;
+ --input-border-color: var(--color-gray-300);
+ --input-border-radius: 0.5rem;
+
+ /* Effects */
+ --input-shadow: none;
+ --input-transition:
+  border-color 150ms ease,
+  box-shadow 150ms ease;
+
+ /* Focus */
+ --input-focus-border-color: var(--color-primary);
+ --input-focus-outline: none;
+ --input-focus-shadow: 0 0 0 2px rgb(59 130 246 / 20%);
+
+ /* State */
+ --input-disabled-opacity: 0.5;
+
+ /* Layout */
+ --input-width: 100%;
+ --input-min-height: 2.5rem;
+}
+
+input {
+ width: var(--input-width);
+ min-height: var(--input-min-height);
+
+ padding-block: var(--input-padding-block);
+ padding-inline: var(--input-padding-inline);
+
+ font-family: var(--input-font-family);
+ font-size: var(--input-font-size);
+ font-weight: var(--input-font-weight);
+ line-height: var(--input-line-height);
+
+ color: var(--input-color);
+ background: var(--input-background);
+
+ border-width: var(--input-border-width);
+ border-style: var(--input-border-style);
+ border-color: var(--input-border-color);
+ border-radius: var(--input-border-radius);
+
+ box-shadow: var(--input-shadow);
+ transition: var(--input-transition);
+}
+
+input:focus-visible {
+ outline: var(--input-focus-outline);
+ border-color: var(--input-focus-border-color);
+ box-shadow: var(--input-focus-shadow);
+}
+
+input:disabled {
+ opacity: var(--input-disabled-opacity);
+ cursor: not-allowed;
+}

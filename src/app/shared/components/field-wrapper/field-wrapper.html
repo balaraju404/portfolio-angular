@@ -1,0 +1,28 @@
+<div class="field-wrapper" [class.vertical]="placement() === 'vertical'"
+ [class.horizontal]="placement() === 'horizontal'">
+ @if (label()) {
+ <label class="field-label">
+  {{ label() }}
+
+  @if (required()) {
+  <span class="required">*</span>
+  }
+ </label>
+ }
+
+ <div class="field-control">
+  <ng-content />
+ </div>
+
+ @if (hint() && !error()) {
+ <div class="field-hint">
+  {{ hint() }}
+ </div>
+ }
+
+ @if (error()) {
+ <div class="field-error">
+  {{ error() }}
+ </div>
+ }
+</div>

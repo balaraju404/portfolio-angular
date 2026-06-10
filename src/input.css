@@ -1,7 +1,0 @@
-@import "tailwindcss";
-
-/* custom components classes */
-
-.required-cls {
- @apply text-xs text-red-500;
-}

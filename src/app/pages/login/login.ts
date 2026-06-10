@@ -1,32 +1,48 @@
 import { Component, inject } from '@angular/core';
-import { TextfieldComponent } from '../../shared/textfield/textfield.component';
-import { ButtonComponent } from '../../shared/button/button.component';
 import { ApiHandlingService } from '../../shared/services/api-handling.service';
 import { Router } from '@angular/router';
 import { Constants } from '../../shared/services/constants.service';
-import { LSHelperService } from '../../shared/services/ls-helper.service';
-import { APP_ROUTES } from '@constants/route.constants';
+import { APP_ROUTES, LAYOUT_ROUTES } from '@constants/route.constants';
+import { Button } from '@shared/components/button/button';
+import { Input } from "@shared/components/input/input";
+import { Password } from "@shared/components/password/password";
+import { FieldWrapper } from "@shared/components/field-wrapper/field-wrapper";
+import { StorageService } from '@shared/services/storage.service';
+import { STORAGE_CONSTANTS } from '@constants/storage.constants';
+import { LOGIN_ENDPOINT_URLS } from '@constants/api.constants';
 
 @Component({
  selector: 'app-login',
- imports: [TextfieldComponent, ButtonComponent],
+ imports: [Button, Input, Password, FieldWrapper],
  templateUrl: './login.html'
 })
 export class Login {
+
  private readonly apiService = inject(ApiHandlingService)
+ private readonly storageService = inject(StorageService)
  private readonly router = inject(Router)
 
- formData: any = this.initializeFormData()
- ngOnInit() {
+ formData = this.initialFormState()
+ loginBtnLoader = false
 
- }
- initializeFormData() {
+ ngOnInit() { }
+
+ private initialFormState() {
   return {
    login_name: "",
    password: ""
   }
  }
- checkValidations() {
+
+ handleLoginEvent(): void {
+  this.handleValidations()
+ }
+
+ gotoSignupPage(): void {
+  this.router.navigate([APP_ROUTES.layout, LAYOUT_ROUTES.signup])
+ }
+
+ handleValidations(): void {
   let msg = ""
   const login_name = (this.formData.login_name || "").trim()
   const password = (this.formData.password || "").trim()
@@ -38,15 +54,17 @@ export class Login {
    alert(msg)
    return
   }
+
   this.checkLogin()
  }
- checkLogin() {
-  this.apiService.post(Constants.LOGIN_CHECK_URL, this.formData).subscribe({
-   next: (res: any) => {
+
+ private checkLogin(): void {
+  const url = Constants.getApiPath(LOGIN_ENDPOINT_URLS.check)
+  this.apiService.post(url, this.formData).subscribe({
+   next: res => {
     if (res["status"]) {
      alert(res["msg"])
-     const data = res["data"]
-     this.hanldeLoginSucess(data)
+     this.hanldeLoginSucess(res.data)
     }
    }, error: err => {
     alert(err)
@@ -54,8 +72,8 @@ export class Login {
   })
  }
 
- hanldeLoginSucess(data: any) {
-  LSHelperService.setItem(Constants.LS_TOKEN_KEY, data)
+ private hanldeLoginSucess(data: any) {
+  this.storageService.setItem(STORAGE_CONSTANTS.token, data)
   this.router.navigate([APP_ROUTES.layout])
  }
 }

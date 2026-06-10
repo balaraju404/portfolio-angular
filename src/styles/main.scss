@@ -1,0 +1,14 @@
+@use "tokens";
+@use "./components";
+@use "./themes/light";
+@use "./themes/dark";
+
+html {
+ scroll-behavior: smooth;
+}
+
+body {
+ font-family: var(--font-primary);
+ background: var(--color-bg);
+ color: var(--color-text);
+}

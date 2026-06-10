@@ -8,8 +8,7 @@
   "build": "ng build",
   "watch": "ng build --watch --configuration development",
   "test": "ng test",
-  "sass": "sass src/sass/main.scss src/styles.css --watch",
-  "tw": "npx @tailwindcss/cli -i ./src/input.css -o ./src/output.css --watch"
+  "tw": "npx @tailwindcss/cli -i ./src/styles/input.css -o ./src/styles/output.css --watch"
  },
  "dependencies": {
   "@angular/animations": "^21.2.14",

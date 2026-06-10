@@ -5,19 +5,24 @@
     <p class="text-lg font-semibold text-gray-900 text-center">Login</p>
    </div>
    <div class="p-4 flex flex-col gap-4">
-    <lib-textfield class="w-full block" placeholder="Enter login name" [(value)]="formData.login_name"></lib-textfield>
 
-    <lib-textfield class="w-full block" type="password" placeholder="Enter password"
-     [(value)]="formData.password"></lib-textfield>
+    <lib-field-wrapper label="Username">
+     <lib-input placeholder="Enter username" [(value)]="formData.login_name" />
+    </lib-field-wrapper>
+
+    <lib-field-wrapper label="Password">
+     <lib-password placeholder="Enter password" [(value)]="formData.password" />
+    </lib-field-wrapper>
 
     <div class="flex justify-center">
-     <lib-button label="Login" (clicked)="checkValidations()"></lib-button>
+     <lib-button [loading]="loginBtnLoader" (buttonClock)="handleLoginEvent()">Login</lib-button>
     </div>
 
     <div class="flex items-center justify-between text-sm text-gray-600">
      <span class="c-pointer hover:text-indigo-600 transition-colors">Forgot Password?</span>
-     <span class="c-pointer hover:text-indigo-600 transition-colors">Create Account</span>
+     <span class="c-pointer hover:text-indigo-600 transition-colors" (click)="gotoSignupPage()">Create Account</span>
     </div>
+
    </div>
   </div>
  </div>

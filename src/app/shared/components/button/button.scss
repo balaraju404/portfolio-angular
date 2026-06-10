@@ -1,0 +1,99 @@
+:host {
+
+ /* Typography */
+ --button-font-family: inherit;
+ --button-font-size: 0.875rem;
+ --button-font-weight: 500;
+ --button-line-height: 1.5;
+
+ /* Spacing */
+ --button-padding-inline: 1rem;
+ --button-padding-block: 0.5rem;
+ --button-gap: 0.5rem;
+
+ /* Appearance */
+ --button-background: var(--color-primary);
+ --button-color: var(--color-white);
+ --button-border-width: 1px;
+ --button-border-style: solid;
+ --button-border-color: transparent;
+ --button-border-radius: 0.5rem;
+
+ /* Effects */
+ --button-shadow: none;
+ --button-transition:
+  opacity 150ms ease,
+  transform 150ms ease,
+  box-shadow 150ms ease;
+
+ /* State */
+ --button-hover-opacity: 0.9;
+ --button-active-opacity: 0.8;
+ --button-disabled-opacity: 0.5;
+ --button-active-transform: translateY(1px);
+
+ /* Focus */
+ --button-focus-outline: 2px solid var(--color-primary);
+ --button-focus-outline-offset: 2px;
+
+ /* Layout */
+ --button-min-height: 2.5rem;
+ --button-width: 100%;
+
+ /* Cursor */
+ --button-cursor: pointer;
+ --button-disabled-cursor: not-allowed;
+
+ width: var(--button-width);
+ display: inline-block;
+}
+
+button {
+ display: inline-flex;
+ align-items: center;
+ justify-content: center;
+ gap: var(--button-gap);
+
+ width: var(--button-width);
+ min-height: var(--button-min-height);
+
+ padding-block: var(--button-padding-block);
+ padding-inline: var(--button-padding-inline);
+
+ font-family: var(--button-font-family);
+ font-size: var(--button-font-size);
+ font-weight: var(--button-font-weight);
+ line-height: var(--button-line-height);
+
+ color: var(--button-color);
+ background: var(--button-background);
+
+ border-width: var(--button-border-width);
+ border-style: var(--button-border-style);
+ border-color: var(--button-border-color);
+ border-radius: var(--button-border-radius);
+
+ box-shadow: var(--button-shadow);
+
+ cursor: var(--button-cursor);
+ transition: var(--button-transition);
+}
+
+button:hover:not(:disabled) {
+ opacity: var(--button-hover-opacity);
+}
+
+button:active:not(:disabled) {
+ opacity: var(--button-active-opacity);
+ transform: var(--button-active-transform);
+}
+
+button:focus-visible {
+ outline: var(--button-focus-outline);
+ outline-offset: var(--button-focus-outline-offset);
+}
+
+button:disabled {
+ opacity: var(--button-disabled-opacity);
+ cursor: var(--button-disabled-cursor);
+}
