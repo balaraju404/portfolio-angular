@@ -7,11 +7,11 @@
    <div class="p-4 grid grid-cols-2 gap-4">
 
     <lib-field-wrapper label="First Name">
-     <lib-input placeholder="Enter first name" [(value)]="formData.login_name" />
+     <lib-input placeholder="Enter first name" [(value)]="formData.fname" />
     </lib-field-wrapper>
 
     <lib-field-wrapper label="Last Name">
-     <lib-input placeholder="Enter last name" [(value)]="formData.login_name" />
+     <lib-input placeholder="Enter last name" [(value)]="formData.lname" />
     </lib-field-wrapper>
 
     <lib-field-wrapper label="Username">
@@ -22,8 +22,9 @@
      <lib-password placeholder="Enter password" [(value)]="formData.password" />
     </lib-field-wrapper>
 
-    <lib-button [loading]="loginBtnLoader" (buttonClock)="handleLoginEvent()">Create User</lib-button>
-    <lib-button [loading]="loginBtnLoader" (buttonClock)="gotoLoginPage()">Goto Login</lib-button>
+    <lib-button [loading]="loginBtnLoader" (buttonClick)="handleLoginEvent()">Create User</lib-button>
+    <lib-button [loading]="loginBtnLoader" class="primary-outline" (buttonClick)="gotoLoginPage()">
+     Goto Login</lib-button>
 
    </div>
   </div>

@@ -154,30 +154,6 @@ export class HelperService {
  }
 
  /**
-  * Local storage helpers (safe wrappers).
-  */
- setLocal<T = any>(key: string, value: T): void {
-  try {
-   localStorage.setItem(key, JSON.stringify(value));
-  } catch { }
- }
-
- getLocal<T = any>(key: string): T | null {
-  try {
-   const v = localStorage.getItem(key);
-   return v ? (JSON.parse(v) as T) : null;
-  } catch {
-   return null;
-  }
- }
-
- removeLocal(key: string): void {
-  try {
-   localStorage.removeItem(key);
-  } catch { }
- }
-
- /**
   * Get query param from current URL.
   */
  getQueryParam(name: string): string | null {

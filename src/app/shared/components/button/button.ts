@@ -16,10 +16,10 @@ export class Button {
  readonly disabled = input(false);
  readonly loading = input(false);
 
- buttonClock = output<Event>()
+ buttonClick = output<Event>()
 
  handleButtonEvent(event: Event): void {
   if (this.disabled() || this.loading()) return
-  this.buttonClock.emit(event)
+  this.buttonClick.emit(event)
  }
 }

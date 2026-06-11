@@ -1,7 +1,5 @@
 import { Component, inject } from '@angular/core';
-import { ApiHandlingService } from '../../shared/services/api-handling.service';
 import { Router } from '@angular/router';
-import { Constants } from '../../shared/services/constants.service';
 import { APP_ROUTES, LAYOUT_ROUTES } from '@constants/route.constants';
 import { Button } from '@shared/components/button/button';
 import { Input } from "@shared/components/input/input";
@@ -9,7 +7,7 @@ import { Password } from "@shared/components/password/password";
 import { FieldWrapper } from "@shared/components/field-wrapper/field-wrapper";
 import { StorageService } from '@shared/services/storage.service';
 import { STORAGE_CONSTANTS } from '@constants/storage.constants';
-import { LOGIN_ENDPOINT_URLS } from '@constants/api.constants';
+import { LoginAPI } from '@core/api/login/login-api.service';
 
 @Component({
  selector: 'app-login',
@@ -18,7 +16,7 @@ import { LOGIN_ENDPOINT_URLS } from '@constants/api.constants';
 })
 export class Login {
 
- private readonly apiService = inject(ApiHandlingService)
+ private readonly loginAPI = inject(LoginAPI)
  private readonly storageService = inject(StorageService)
  private readonly router = inject(Router)
 
@@ -59,8 +57,7 @@ export class Login {
  }
 
  private checkLogin(): void {
-  const url = Constants.getApiPath(LOGIN_ENDPOINT_URLS.check)
-  this.apiService.post(url, this.formData).subscribe({
+  this.loginAPI.check(this.formData).subscribe({
    next: res => {
     if (res["status"]) {
      alert(res["msg"])
@@ -74,6 +71,6 @@ export class Login {
 
  private hanldeLoginSucess(data: any) {
   this.storageService.setItem(STORAGE_CONSTANTS.token, data)
-  this.router.navigate([APP_ROUTES.layout])
+  this.router.navigate([APP_ROUTES.layout, LAYOUT_ROUTES.home])
  }
 }

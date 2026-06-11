@@ -1,7 +1,8 @@
-.button-primary {
- background-color: var(--color-primary);
- color: var(--color-white);
- padding: 0.5rem 0.75rem;
- min-height: 2.5rem;
- border-radius: var(--radius-md);
+lib-button {
+
+ &.primary-outline {
+  --button-background: transparant;
+  --button-color: var(--color-primary);
+  --button-border-color: var(--color-primary);
+ }
 }

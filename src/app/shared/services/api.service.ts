@@ -3,10 +3,8 @@ import { HttpClient, HttpErrorResponse, HttpParams } from "@angular/common/http"
 import { Observable, throwError } from "rxjs"
 import { catchError } from "rxjs/operators"
 
-@Injectable({
- providedIn: "root"
-})
-export class ApiHandlingService {
+@Injectable({ providedIn: "root" })
+export class APIService {
  private readonly http: HttpClient = inject(HttpClient)
 
  get(url: string, params?: any): Observable<any> {
@@ -43,12 +41,8 @@ export class ApiHandlingService {
   let errorMsg = "Something went wrong. Please try again later."
 
   // Handle different error formats
-  if (error.error instanceof ErrorEvent) {
-   errorMsg = `Client Error: ${error.error.message}`
-  } else if (error.error?.errors?.errors) {
-   errorMsg = error.error.errors.errors[0]?.["msg"]
-  } else if (error.message) {
-   errorMsg = error.message
+  if (error.error.error) {
+   errorMsg = error.error.error
   }
 
   return throwError(() => errorMsg)
