@@ -149,11 +149,12 @@ export class PortfolioCreate implements OnInit {
  }
 
  setFeedback(message: string, type: 'success' | 'error') {
-  this.feedbackMessage = message;
-  this.feedbackType = type;
-  setTimeout(() => {
-   this.feedbackMessage = '';
-  }, 5000);
+  alert(message)
+  // this.feedbackMessage = message;
+  // this.feedbackType = type;
+  // setTimeout(() => {
+  //  this.feedbackMessage = '';
+  // }, 5000);
  }
 
  submitPortfolio() {

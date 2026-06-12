@@ -1,3 +1,6 @@
+@let tab = selectedTab();
+@let portfolios = portfolioList();
+
 <div class="flex flex-col gap-6">
 
  <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
@@ -9,12 +12,14 @@
   </div>
 
   <div class="flex flex-wrap items-center gap-3">
-   @if (isLoggedIn) {
-   <button type="button" (click)="createPortfolio()" class="rounded-full bg-slate-900 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-slate-800">
+   @if (isLoggedIn()) {
+   <button type="button" (click)="createPortfolio()"
+    class="rounded-full bg-slate-900 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-slate-800">
     Create Portfolio
    </button>
    } @else {
-   <button type="button" (click)="goToLogin()" class="rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-900 shadow-sm transition hover:bg-slate-50">
+   <button type="button" (click)="navigateToLogin()"
+    class="rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-900 shadow-sm transition hover:bg-slate-50">
     Login to create
    </button>
    }
@@ -22,39 +27,56 @@
  </div>
 
  <div class="overflow-hidden rounded-3xl bg-slate-100 p-2 shadow-inner">
-  <div class="grid grid-cols-2 gap-2 sm:grid-cols-3">
-   @for (tab of tabs; track $index) {
-   <button type="button" (click)="selectTab(tab.id)" class="w-full rounded-2xl transition focus:outline-none">
-    <span class="inline-flex w-full justify-center rounded-2xl px-4 py-3 text-sm font-semibold {{ selectedTab === tab.id ? 'bg-slate-900 text-white shadow' : 'bg-white text-slate-700 hover:bg-slate-50' }}">
-     {{tab.label}}
+  <div class="grid grid-cols-2 gap-2">
+   @for (tabItem of tabs; track tabItem.id) {
+   <button type="button" (click)="selectTab(tabItem.id)" class="w-full rounded-2xl transition focus:outline-none">
+    <span class="inline-flex w-full justify-center rounded-2xl px-4 py-3 text-sm font-semibold"
+     [class.bg-slate-900]="tab === tabItem.id" [class.text-white]="tab === tabItem.id"
+     [class.shadow]="tab === tabItem.id" [class.bg-white]="tab !== tabItem.id"
+     [class.text-slate-700]="tab !== tabItem.id">
+     {{ tabItem.label }}
     </span>
    </button>
    }
   </div>
  </div>
 
- @if (selectedTab === 'mine' && !isLoggedIn) {
+ @if (tab === 'mine' && !isLoggedIn()) {
+
  <div class="rounded-3xl border border-slate-200 bg-white p-8 text-center text-slate-700 shadow-sm">
   <p class="text-lg font-medium text-slate-900">Sign in to view and manage your portfolio</p>
-  <p class="mt-2 text-sm text-slate-600">Your private and public portfolio items appear here once you are logged in.</p>
-  <button type="button" (click)="goToLogin()" class="mt-6 rounded-full bg-slate-900 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-slate-800">
+  <p class="mt-2 text-sm text-slate-600">Your private and public portfolio items appear here once you are loggedin.</p>
+  <button type="button" (click)="navigateToLogin()"
+   class="mt-6 rounded-full bg-slate-900 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-slate-800">
    Login now
   </button>
  </div>
+
  } @else {
+
+ @if (loader()) {
+
+ <div class="py-12 text-center">
+  <p class="text-sm text-slate-500">Loading portfolios...</p>
+ </div>
+
+ } @else {
+
+ @if (portfolios.length) {
  <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-  @for (portfolio of portfolioList; track $index) {
+  @for (portfolio of portfolios; track portfolio._id) {
   <app-portfolio-card [portfolio]="portfolio" />
   }
  </div>
 
- @if (portfolioList.length === 0) {
+ } @else {
  <div class="rounded-3xl border border-dashed border-slate-300 bg-slate-50 p-8 text-center text-slate-500">
   <p class="text-base font-medium">No portfolios found yet.</p>
-  @if (selectedTab === 'mine' && isLoggedIn) {
+  @if (tab === 'mine' && isLoggedIn()) {
   <p class="mt-2 text-sm">Create one to see it here.</p>
   }
  </div>
+ }
  }
  }
 </div>

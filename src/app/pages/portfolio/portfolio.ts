@@ -1,11 +1,22 @@
-import { Component, inject, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-import { PortfolioCardData } from '@core/api/portfolio/portfolio-api.interface';
-import { PortfolioAPI } from '@core/api/portfolio/portfolio-api.service';
-import { PortfolioCard } from 'src/app/components/portfolio-card/portfolio-card';
-import { StorageService } from '@shared/services/storage.service';
-import { STORAGE_CONSTANTS } from '@constants/storage.constants';
-import { APP_ROUTES, LAYOUT_ROUTES } from '@constants/route.constants';
+import {
+ Component,
+ OnInit,
+ inject,
+ signal,
+} from '@angular/core'
+import { Router } from '@angular/router'
+
+import { PortfolioCardData } from '@core/api/portfolio/portfolio-api.interface'
+import { PortfolioAPI } from '@core/api/portfolio/portfolio-api.service'
+import { PortfolioCard } from 'src/app/components/portfolio-card/portfolio-card'
+
+import { StorageService } from '@shared/services/storage.service'
+
+import { STORAGE_CONSTANTS } from '@constants/storage.constants'
+import { APP_ROUTES, LAYOUT_ROUTES } from '@constants/route.constants'
+import { UserData } from '@core/api/login/login-api.interface'
+
+type TabType = 'public' | 'mine'
 
 @Component({
  selector: 'app-portfolio',
@@ -19,73 +30,88 @@ export class Portfolio implements OnInit {
 
  readonly tabs = [
   { id: 'public', label: 'Public Portfolios' },
-  { id: 'mine', label: 'My Portfolios' }
+  { id: 'mine', label: 'My Portfolios' },
  ] as const
 
- selectedTab: TabType = 'public'
- portfolioList: PortfolioCardData[] = []
- isLoggedIn = false
+ readonly selectedTab = signal<TabType>('public')
+ readonly portfolioList = signal<PortfolioCardData[]>([])
+ readonly loader = signal(false)
 
  ngOnInit(): void {
-  this.isLoggedIn = this.getLoginStatus()
-  this.fetchPortfolios()
+  this.loadPortfolios()
  }
 
  selectTab(tabId: TabType): void {
-  if (this.selectedTab === tabId) {
+  if (this.selectedTab() === tabId) {
    return
   }
 
-  this.selectedTab = tabId
-  this.fetchPortfolios()
- }
-
- goToLogin(): void {
-  this.router.navigate([APP_ROUTES.layout, LAYOUT_ROUTES.login])
+  this.selectedTab.set(tabId)
+  this.loadPortfolios()
  }
 
  createPortfolio(): void {
-  if (!this.isLoggedIn) {
-   this.goToLogin()
+  if (!this.isLoggedIn()) {
+   this.navigateToLogin()
    return
   }
 
   this.router.navigate([APP_ROUTES.layout, LAYOUT_ROUTES.portfolio_create])
  }
 
- private fetchPortfolios(): void {
-  this.portfolioList = []
+ private loadPortfolios(): void {
+  this.portfolioList.set([])
 
-  if (this.selectedTab === 'mine' && !this.isLoggedIn) {
+  if (this.selectedTab() === 'public') {
+   this.loadPublicPortfolios()
    return
   }
 
-  if (this.selectedTab === 'public') {
-   this.portfolioApi.list({ is_private: 0 }).subscribe({
-    next: res => this.portfolioList = res.data || []
-   })
-   return
-  }
+  const userId = this.getUserId()
 
-  const userId = this.getLoggedInUserId()
   if (!userId) {
-   this.portfolioList = []
    return
   }
 
-  this.portfolioApi.list({ user_id: userId }).subscribe({
-   next: res => this.portfolioList = res.data || []
-  })
+  this.loadUserPortfolios(userId)
  }
 
- private getLoginStatus(): boolean {
-  return !!this.storageService.getItem<any>(STORAGE_CONSTANTS.token)
+ private loadPublicPortfolios(): void {
+  this.loader.set(true)
+
+  this.portfolioApi
+   .list({ is_private: 0 })
+   .subscribe({
+    next: ({ data }) => {
+     this.portfolioList.set(data ?? [])
+    },
+    complete: () => this.loader.set(false),
+   })
  }
 
- private getLoggedInUserId(): string | null {
-  const token = this.storageService.getItem<any>(STORAGE_CONSTANTS.token)
-  return token?.user_id || token?.id || token?.userId || null
+ private loadUserPortfolios(userId: string): void {
+  this.loader.set(true)
+
+  this.portfolioApi
+   .list({ user_id: userId })
+   .subscribe({
+    next: ({ data }) => {
+     this.portfolioList.set(data ?? [])
+    },
+    complete: () => this.loader.set(false),
+   })
+ }
+
+ navigateToLogin(): void {
+  this.router.navigate([APP_ROUTES.layout, LAYOUT_ROUTES.login])
+ }
+
+ isLoggedIn(): boolean {
+  return !!this.storageService.getItem(STORAGE_CONSTANTS.token)
+ }
+
+ private getUserId(): string | null {
+  const token = this.storageService.getItem<UserData>(STORAGE_CONSTANTS.token)
+  return (token?.user_id ?? null)
  }
 }
-
-type TabType = "public" | "mine"
