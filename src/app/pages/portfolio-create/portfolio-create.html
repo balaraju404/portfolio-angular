@@ -1,15 +1,270 @@
-<div class="flex items-center justify-center">
- <div class="w-full max-w-3xl rounded-3xl border border-slate-200 bg-white p-10 shadow-lg">
-  <h1 class="text-3xl font-semibold text-slate-900">Create Portfolio</h1>
-  <p class="mt-3 text-sm leading-6 text-slate-600">
-   This page is the starting point for creating a new portfolio. Add your portfolio details and publish your work once
-   ready.
-  </p>
+<div class="min-h-screen bg-linear-to-br from-slate-50 to-slate-100">
+ <div class="max-w-4xl mx-auto">
+  <!-- Header -->
+  <div class="mb-8">
+   <h1 class="text-4xl font-bold text-slate-900">Create Your Portfolio</h1>
+   <p class="mt-2 text-lg text-slate-600">Share your work, skills, and experience with the world.</p>
+  </div>
 
-  <div class="mt-8 rounded-3xl bg-slate-50 p-6 text-slate-700">
-   <p class="text-base font-medium text-slate-900">Portfolio creation is not configured yet.</p>
-   <p class="mt-3 text-sm leading-6 text-slate-600">You are signed in, and this area can be extended with a form to
-    submit your portfolio data.</p>
+  <!-- Feedback Message -->
+  @if (feedbackMessage) {
+  <div [ngClass]="feedbackType === 'success'
+        ? 'border-emerald-200 bg-emerald-50 text-emerald-700'
+        : 'border-rose-200 bg-rose-50 text-rose-700'" class="mb-6 rounded-2xl border px-4 py-3 text-sm">
+   {{ feedbackMessage }}
+  </div>
+  }
+
+  <!-- Form Container -->
+  <div class="rounded-3xl bg-white shadow-xl overflow-hidden">
+   <div class="bg-indigo-600 px-8 py-6 text-white">
+    <p class="text-xl font-semibold">Portfolio Details</p>
+    <p class="mt-1 text-sm text-indigo-100">Fill in your portfolio information below</p>
+   </div>
+
+   <form class="p-8 space-y-8">
+    <!-- Portfolio Name -->
+    <div>
+     <label class="block text-sm font-semibold text-slate-900 mb-2">Portfolio Name *</label>
+     <input type="text" [(ngModel)]="portfolioName" name="portfolioName" placeholder="e.g., My Full Stack Portfolio"
+      class="w-full rounded-xl border border-slate-300 px-4 py-3 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 outline-none transition" />
+    </div>
+
+    <!-- User Info Section -->
+    <div class="border-t pt-8">
+     <h2 class="text-lg font-semibold text-slate-900 mb-4">About You</h2>
+     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div>
+       <label class="block text-sm font-semibold text-slate-900 mb-2">Full Name *</label>
+       <input type="text" [(ngModel)]="userInfo.name" name="userName" placeholder="Your name"
+        class="w-full rounded-xl border border-slate-300 px-4 py-3 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 outline-none transition" />
+      </div>
+      <div>
+       <label class="block text-sm font-semibold text-slate-900 mb-2">Professional Role *</label>
+       <input type="text" [(ngModel)]="userInfo.role" name="userRole" placeholder="e.g., Full Stack Developer"
+        class="w-full rounded-xl border border-slate-300 px-4 py-3 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 outline-none transition" />
+      </div>
+     </div>
+     <div class="mt-4">
+      <label class="block text-sm font-semibold text-slate-900 mb-2">About</label>
+      <textarea [(ngModel)]="userInfo.about" name="userAbout" placeholder="Tell us about yourself..." rows="3"
+       class="w-full rounded-xl border border-slate-300 px-4 py-3 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 outline-none transition"></textarea>
+     </div>
+     <div class="mt-4">
+      <label class="block text-sm font-semibold text-slate-900 mb-2">Profile Image URL</label>
+      <input type="url" [(ngModel)]="userInfo.img" name="userImg" placeholder="https://example.com/image.jpg"
+       class="w-full rounded-xl border border-slate-300 px-4 py-3 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 outline-none transition" />
+     </div>
+    </div>
+
+    <!-- Contact Info Section -->
+    <div class="border-t pt-8">
+     <h2 class="text-lg font-semibold text-slate-900 mb-4">Contact Information</h2>
+     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div>
+       <label class="block text-sm font-semibold text-slate-900 mb-2">Mobile Number *</label>
+       <input type="tel" [(ngModel)]="contactInfo.mobile_no" name="mobileNo" placeholder="+1 (555) 000-0000"
+        class="w-full rounded-xl border border-slate-300 px-4 py-3 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 outline-none transition" />
+      </div>
+      <div>
+       <label class="block text-sm font-semibold text-slate-900 mb-2">Alternative Number</label>
+       <input type="tel" [(ngModel)]="contactInfo.alternative_number" name="altNumber" placeholder="+1 (555) 000-0001"
+        class="w-full rounded-xl border border-slate-300 px-4 py-3 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 outline-none transition" />
+      </div>
+      <div>
+       <label class="block text-sm font-semibold text-slate-900 mb-2">Email *</label>
+       <input type="email" [(ngModel)]="contactInfo.email" name="email" placeholder="your@email.com"
+        class="w-full rounded-xl border border-slate-300 px-4 py-3 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 outline-none transition" />
+      </div>
+      <div>
+       <label class="block text-sm font-semibold text-slate-900 mb-2">Alternative Email</label>
+       <input type="email" [(ngModel)]="contactInfo.alternative_email" name="altEmail"
+        placeholder="alternative@email.com"
+        class="w-full rounded-xl border border-slate-300 px-4 py-3 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 outline-none transition" />
+      </div>
+     </div>
+     <div class="mt-4">
+      <label class="block text-sm font-semibold text-slate-900 mb-2">Address *</label>
+      <input type="text" [(ngModel)]="contactInfo.address" name="address" placeholder="City, State, Country"
+       class="w-full rounded-xl border border-slate-300 px-4 py-3 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 outline-none transition" />
+     </div>
+    </div>
+
+    <!-- Services Section -->
+    <div class="border-t pt-8">
+     <h2 class="text-lg font-semibold text-slate-900 mb-4">Services (Optional)</h2>
+     <div class="space-y-4">
+      <!-- Service List -->
+      @if (services.length > 0) {
+      <div class="space-y-2">
+       @for (service of services; track $index) {
+       <div class="flex items-center justify-between p-4 bg-slate-50 rounded-xl border border-slate-200">
+        <div>
+         <p class="font-medium text-slate-900">{{ service.title }}</p>
+         <p class="text-sm text-slate-600">{{ service.description.join(', ') }}</p>
+        </div>
+        <button type="button" (click)="removeService($index)"
+         class="text-rose-600 hover:text-rose-700 font-medium text-sm">Remove</button>
+       </div>
+       }
+      </div>
+      }
+
+      <!-- Add Service Form -->
+      <div class="border-2 border-dashed border-slate-300 rounded-xl p-4 space-y-3">
+       <div>
+        <label class="block text-sm font-semibold text-slate-900 mb-1">Service Title</label>
+        <input type="text" [(ngModel)]="newService.title" name="serviceTitle" placeholder="e.g., Web Development"
+         class="w-full rounded-lg border border-slate-300 px-3 py-2 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-200 outline-none transition" />
+       </div>
+       <div>
+        <label class="block text-sm font-semibold text-slate-900 mb-1">Description Line</label>
+        <div class="flex gap-2">
+         <input type="text" [(ngModel)]="newServiceDescLine" name="serviceDesc" placeholder="Add a description"
+          class="flex-1 rounded-lg border border-slate-300 px-3 py-2 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-200 outline-none transition" />
+         <button type="button" (click)="addServiceDescription()"
+          class="px-4 py-2 bg-indigo-600 text-white font-medium rounded-lg hover:bg-indigo-700 transition">Add</button>
+        </div>
+        @if (newService.description && newService.description.length > 0) {
+        <div class="mt-2 space-y-1">
+         @for (desc of newService.description; track $index) {
+         <p class="text-sm text-slate-700 flex justify-between items-center bg-indigo-50 px-2 py-1 rounded">
+          <span>{{ desc }}</span>
+          <button type="button" (click)="removeServiceDescription($index)" class="text-rose-600 text-xs">×</button>
+         </p>
+         }
+        </div>
+        }
+       </div>
+       <button type="button" (click)="addService()"
+        class="w-full px-4 py-2 bg-emerald-600 text-white font-medium rounded-lg hover:bg-emerald-700 transition">Add
+        Service</button>
+      </div>
+     </div>
+    </div>
+
+    <!-- Projects Section -->
+    <div class="border-t pt-8">
+     <h2 class="text-lg font-semibold text-slate-900 mb-4">Projects (Optional)</h2>
+     <div class="space-y-4">
+      <!-- Project List -->
+      @if (projects.length > 0) {
+      <div class="space-y-2">
+       @for (project of projects; track $index) {
+       <div class="p-4 bg-slate-50 rounded-xl border border-slate-200">
+        <div class="flex items-start justify-between mb-2">
+         <div>
+          <p class="font-medium text-slate-900">{{ project.title }}</p>
+          <p class="text-sm text-slate-600">{{ project.description }}</p>
+          @if (project.url) { <p class="text-sm text-indigo-600">{{ project.url }}</p> }
+         </div>
+         <button type="button" (click)="removeProject($index)"
+          class="text-rose-600 hover:text-rose-700 font-medium text-sm">Remove</button>
+        </div>
+        @if (project.tech_stack && project.tech_stack.length > 0) {
+        <div class="mt-2 flex flex-wrap gap-2">
+         @for (tech of project.tech_stack; track $index) {
+         <span class="px-2 py-1 bg-indigo-100 text-indigo-700 text-xs rounded-full inline-flex items-center">
+          {{ tech.cat_name }}: {{ tech.skills.join(', ') }}</span>
+         }
+        </div>
+        }
+       </div>
+       }
+      </div>
+      }
+
+      <!-- Add Project Form -->
+      <div class="border-2 border-dashed border-slate-300 rounded-xl p-4 space-y-3">
+       <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+        <div>
+         <label class="block text-sm font-semibold text-slate-900 mb-1">Project Title</label>
+         <input type="text" [(ngModel)]="newProject.title" name="projectTitle" placeholder="e.g., E-Commerce Platform"
+          class="w-full rounded-lg border border-slate-300 px-3 py-2 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-200 outline-none transition" />
+        </div>
+        <div>
+         <label class="block text-sm font-semibold text-slate-900 mb-1">Project URL</label>
+         <input type="url" [(ngModel)]="newProject.url" name="projectUrl" placeholder="https://example.com"
+          class="w-full rounded-lg border border-slate-300 px-3 py-2 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-200 outline-none transition" />
+        </div>
+       </div>
+       <div>
+        <label class="block text-sm font-semibold text-slate-900 mb-1">Description</label>
+        <textarea [(ngModel)]="newProject.description" name="projectDesc" placeholder="Project description" rows="2"
+         class="w-full rounded-lg border border-slate-300 px-3 py-2 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-200 outline-none transition"></textarea>
+       </div>
+
+       <!-- Tech Stack for Project -->
+       <div class="border-t pt-3">
+        <p class="text-sm font-semibold text-slate-900 mb-2">Technologies</p>
+        @if (newProject.tech_stack && newProject.tech_stack.length > 0) {
+        <div class="space-y-2 mb-3">
+         @for (stack of newProject.tech_stack; track $index) {
+         <div class="p-2 bg-indigo-50 rounded-lg border border-indigo-200">
+          <div class="flex justify-between items-start">
+           <div>
+            <p class="font-medium text-sm text-slate-900">{{ stack.cat_name }}</p>
+            <p class="text-xs text-slate-600">{{ stack.skills.join(', ') }}</p>
+           </div>
+           <button type="button" (click)="removeTechStack($index)" class="text-rose-600 text-xs">Remove</button>
+          </div>
+         </div>
+         }
+        </div>
+        }
+        <div class="space-y-2">
+         <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
+          <div>
+           <label class="block text-xs font-semibold text-slate-900 mb-1">Category</label>
+           <input type="text" [(ngModel)]="newTechStack.cat_name" name="techCat" placeholder="e.g., Frontend, Backend"
+            class="w-full rounded-lg border border-slate-300 px-3 py-2 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-200 outline-none transition text-sm" />
+          </div>
+          <div>
+           <label class="block text-xs font-semibold text-slate-900 mb-1">Skill</label>
+           <div class="flex gap-1">
+            <input type="text" [(ngModel)]="newTechStackSkill" name="techSkill" placeholder="e.g., Angular"
+             class="flex-1 rounded-lg border border-slate-300 px-3 py-2 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-200 outline-none transition text-sm" />
+            <button type="button" (click)="addTechStack()"
+             class="px-3 py-2 bg-indigo-600 text-white font-medium rounded-lg hover:bg-indigo-700 transition text-sm">Add</button>
+           </div>
+          </div>
+         </div>
+         @if (newTechStack.skills && newTechStack.skills.length > 0) {
+         <div class="flex flex-wrap gap-1">
+          @for (skill of newTechStack.skills; track $index) {
+          <span class="px-2 py-1 bg-indigo-100 text-indigo-700 text-xs rounded-full inline-flex items-center gap-1">
+           {{ skill }}
+           <button type="button" (click)="removeSkill(newProject.tech_stack?.length || 0, $index)"
+            class="text-indigo-600 hover:text-indigo-800">×</button>
+          </span>
+          }
+         </div>
+         }
+         <button type="button" (click)="confirmTechStack()"
+          class="w-full px-3 py-2 bg-indigo-600 text-white font-medium rounded-lg hover:bg-indigo-700 transition text-sm">Add
+          Tech Stack</button>
+        </div>
+       </div>
+
+       <button type="button" (click)="addProject()"
+        class="w-full px-4 py-2 bg-emerald-600 text-white font-medium rounded-lg hover:bg-emerald-700 transition">Add
+        Project</button>
+      </div>
+     </div>
+    </div>
+
+    <!-- Submit Button -->
+    <div class="border-t pt-8 flex gap-4">
+     <button type="button" (click)="submitPortfolio()" [disabled]="isSubmitting"
+      class="flex-1 px-6 py-3 bg-indigo-600 text-white font-semibold rounded-xl hover:bg-indigo-700 disabled:opacity-50 transition">
+      {{ isSubmitting ? 'Creating...' : 'Create Portfolio' }}
+     </button>
+     <button type="button" (click)="gotoPortfolio()"
+      class="px-6 py-3 bg-slate-200 text-slate-900 font-semibold rounded-xl hover:bg-slate-300 transition">
+      Cancel
+     </button>
+    </div>
+   </form>
   </div>
  </div>
 </div>

@@ -1,21 +1,64 @@
-import { Observable } from "rxjs";
+/**
+ * API request/response shapes for portfolio endpoints.
+ */
 
-/** Create */
-export interface PortfolioCreateRequest { }
-export interface PortfolioCreateResponse { }
+export interface PortfolioCreateRequest {
+ user_id: string;
+ portfolio_name: string;
+ user_info: UserInfo;
+ services?: Service[];
+ projects?: Project[];
+ contact_info?: ContactInfo;
+}
 
-/** Details */
-export interface PortfolioListRequest {
- user_id?: string;
- portfolio_id?: string;
- portfolio_name?: string;
- is_private?: 0 | 1;
- status?: 0 | 1;
+// Core models
+export interface UserInfo {
+ name: string;
+ role: string;
+ about: string;
+ img?: string;
 }
-export interface PortfolioListResponse {
- status: boolean;
- data: PortfolioCardData[];
+
+export interface Service {
+ id: number;
+ title: string;
+ description: string[];
 }
+
+export interface TechStack {
+ id?: number;
+ cat_name: string;
+ skills: string[];
+}
+
+export interface Project {
+ id: number;
+ title: string;
+ description: string;
+ url?: string;
+ tech_stack?: TechStack[];
+}
+
+export interface ContactInfo {
+ mobile_no: string;
+ alternative_number?: string;
+ email: string;
+ alternative_email?: string;
+ address: string;
+}
+
+// Card/listing-specific models
+export interface UserInfoCard {
+ name: string;
+ role: string;
+ img?: string;
+ about?: string;
+}
+
+export interface ContactInfoCard {
+ address: string;
+}
+
 export interface PortfolioCardData {
  _id: string;
  portfolio_name: string;
@@ -25,17 +68,16 @@ export interface PortfolioCardData {
  services_count: number;
  skills: string[];
 }
-export interface UserInfoCard {
- name: string;
- role: string;
- img: string;
- about: string;
-}
-export interface ContactInfoCard {
- address: string;
+
+// API request/response shapes for list/details
+export interface PortfolioListRequest {
+ user_id?: string;
+ portfolio_id?: string;
+ portfolio_name?: string;
+ is_private?: 0 | 1;
+ status?: 0 | 1;
 }
 
-/** Details */
 export interface PortfolioDetailsRequest {
  user_id?: string;
  portfolio_id?: string;
@@ -43,12 +85,7 @@ export interface PortfolioDetailsRequest {
  is_private?: 0 | 1;
  status?: 0 | 1;
 }
-export interface PortfolioDetailsResponse {
- status: boolean;
- data: PortfolioData[];
-}
 
-/** Portfolio Data */
 export interface PortfolioData {
  _id: string;
  user_id: string;
@@ -61,49 +98,4 @@ export interface PortfolioData {
  services: Service[];
  projects: Project[];
  contact_info: ContactInfo;
-}
-
-/** User Info */
-export interface UserInfo {
- name: string;
- role: string;
- about: string;
- img: string;
-}
-
-/** Services */
-export interface Service {
- id: number;
- title: string;
- description: string[];
-}
-
-/** Projects */
-export interface Project {
- id: number;
- title: string;
- description: string;
- url: string;
- teck_stack: TechStack[];
-}
-
-/** Tech Stack */
-export interface TechStack {
- id: number;
- cat_name: string;
- skills: string[];
-}
-
-/** Contact Info */
-export interface ContactInfo {
- mobile_no: string;
- email: string;
- address: string;
-}
-
-/** Service */
-export interface PortfolioApiInterface {
- create(request: PortfolioCreateRequest): Observable<PortfolioCreateResponse>;
- list(request: PortfolioListRequest): Observable<PortfolioListResponse>;
- details(request: PortfolioDetailsRequest): Observable<PortfolioDetailsResponse>;
 }

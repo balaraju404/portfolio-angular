@@ -1,0 +1,17 @@
+// Portfolio Create Component Styles
+
+// Input focus state enhancement
+input:focus,
+textarea:focus {
+ transition: all 0.2s ease;
+}
+
+// Utility classes for better form presentation
+.form-group {
+ display: flex;
+ flex-direction: column;
+
+ label {
+  margin-bottom: 0.5rem;
+ }
+}
