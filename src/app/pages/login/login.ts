@@ -1,5 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
+import { NgClass } from '@angular/common';
 import { APP_ROUTES, LAYOUT_ROUTES } from '@constants/route.constants';
 import { Button } from '@shared/components/button/button';
 import { Input } from "@shared/components/input/input";
@@ -11,24 +12,25 @@ import { LoginAPI } from '@core/api/login/login-api.service';
 
 @Component({
  selector: 'app-login',
- imports: [Button, Input, Password, FieldWrapper],
+ imports: [Button, Input, Password, FieldWrapper, NgClass],
  templateUrl: './login.html'
 })
 export class Login {
-
  private readonly loginAPI = inject(LoginAPI)
  private readonly storageService = inject(StorageService)
  private readonly router = inject(Router)
 
  formData = this.initialFormState()
  loginBtnLoader = false
+ feedbackMessage = ''
+ feedbackType: 'success' | 'error' = 'error'
 
  ngOnInit() { }
 
  private initialFormState() {
   return {
-   login_name: "",
-   password: ""
+   login_name: '',
+   password: ''
   }
  }
 
@@ -40,16 +42,21 @@ export class Login {
   this.router.navigate([APP_ROUTES.layout, LAYOUT_ROUTES.signup])
  }
 
- handleValidations(): void {
-  let msg = ""
-  const login_name = (this.formData.login_name || "").trim()
-  const password = (this.formData.password || "").trim()
+ gotoForgotPassword(): void {
+  this.router.navigate([APP_ROUTES.layout, LAYOUT_ROUTES.forgor_password])
+ }
 
-  if (!login_name) msg = "Please enter login name"
-  else if (!password) msg = "Please enter password"
+ handleValidations(): void {
+  this.feedbackMessage = ''
+  let msg = ''
+  const login_name = (this.formData.login_name || '').trim()
+  const password = (this.formData.password || '').trim()
+
+  if (!login_name) msg = 'Please enter username'
+  else if (!password) msg = 'Please enter password'
 
   if (msg.length) {
-   alert(msg)
+   this.presentFeedback(msg, 'error')
    return
   }
 
@@ -57,20 +64,31 @@ export class Login {
  }
 
  private checkLogin(): void {
+  this.loginBtnLoader = true
   this.loginAPI.check(this.formData).subscribe({
    next: res => {
-    if (res["status"]) {
-     alert(res["msg"])
-     this.hanldeLoginSucess(res.data)
+    this.loginBtnLoader = false
+    if (res['status']) {
+     this.presentFeedback(res['msg'] || 'Successfully logged in', 'success')
+     this.handleLoginSuccess(res.data)
+    } else {
+     this.presentFeedback(res['msg'] || 'Login failed', 'error')
     }
-   }, error: err => {
-    alert(err)
+   },
+   error: err => {
+    this.loginBtnLoader = false
+    this.presentFeedback(typeof err === 'string' ? err : 'Unable to login', 'error')
    }
   })
  }
 
- private hanldeLoginSucess(data: any) {
+ private handleLoginSuccess(data: any) {
   this.storageService.setItem(STORAGE_CONSTANTS.token, data)
   this.router.navigate([APP_ROUTES.layout, LAYOUT_ROUTES.home])
+ }
+
+ private presentFeedback(message: string, type: 'success' | 'error') {
+  this.feedbackMessage = message
+  this.feedbackType = type
  }
 }

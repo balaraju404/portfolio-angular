@@ -1,16 +1,13 @@
 import { Component, inject, OnDestroy, OnInit } from "@angular/core"
 import { Router, NavigationEnd } from "@angular/router"
-import { NgClass } from "@angular/common"
 import { Subscription } from "rxjs"
 import { APP_ROUTES, LAYOUT_ROUTES } from "@constants/route.constants"
-import { Button } from "@shared/components/button/button"
 import { StorageService } from "@shared/services/storage.service"
 import { STORAGE_CONSTANTS } from "@constants/storage.constants"
 import { UserData } from "@core/api/login/login-api.interface"
 
 @Component({
  selector: "app-header",
- imports: [Button, NgClass],
  templateUrl: "./header.component.html"
 })
 export class HeaderComponent implements OnInit, OnDestroy {
@@ -35,19 +32,19 @@ export class HeaderComponent implements OnInit, OnDestroy {
  userData: UserData | null = null
 
  ngOnInit() {
-  this.userData = this.storageService.getItem<UserData>(STORAGE_CONSTANTS.token)
-  this.selectedTab = this.tabsList[0]
+  this.updateUserData()
+  this.setSelectedTabFromUrl(this.router.url)
 
-  // Close mobile menu automatically when navigation finishes
   this.routerEventsSub = this.router.events.subscribe((event) => {
    if (event instanceof NavigationEnd) {
     this.mobileOpen = false
+    this.setSelectedTabFromUrl(event.urlAfterRedirects)
    }
   })
 
   this.storageSubscription = this.storageService.onStorageChanges().subscribe((event) => {
    if (event.key === STORAGE_CONSTANTS.token || event.key === '*') {
-    this.userData = this.storageService.getItem<UserData>(STORAGE_CONSTANTS.token)
+    this.updateUserData()
    }
   })
  }
@@ -68,7 +65,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
   return `${first}${second}`.toUpperCase() || "U"
  }
 
- // toggle helper (optional, template currently toggles property directly)
  toggleMobile() {
   this.mobileOpen = !this.mobileOpen
  }
@@ -82,8 +78,26 @@ export class HeaderComponent implements OnInit, OnDestroy {
   this.navigateToRoute(LAYOUT_ROUTES.login)
  }
 
+ gotoSignup(): void {
+  this.navigateToRoute(LAYOUT_ROUTES.signup)
+ }
+
+ logout(): void {
+  this.storageService.removeItem(STORAGE_CONSTANTS.token)
+  this.userData = null
+  this.navigateToRoute(LAYOUT_ROUTES.login)
+ }
+
+ private updateUserData(): void {
+  this.userData = this.storageService.getItem<UserData>(STORAGE_CONSTANTS.token)
+ }
+
+ private setSelectedTabFromUrl(url: string): void {
+  const currentPath = url.split('/').pop() ?? ''
+  this.selectedTab = this.tabsList.find(tab => tab.link === currentPath) ?? this.tabsList[0]
+ }
+
  private navigateToRoute(link: string): void {
-  // ensure mobile menu closes after navigation
   this.mobileOpen = false
   this.router.navigate([APP_ROUTES.layout, link])
  }
