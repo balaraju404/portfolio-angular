@@ -1,29 +1,28 @@
 import { Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
-import { NgClass } from '@angular/common';
 import { APP_ROUTES, LAYOUT_ROUTES } from '@constants/route.constants';
 import { Button } from '@shared/components/button/button';
 import { Input } from "@shared/components/input/input";
 import { Password } from "@shared/components/password/password";
 import { FieldWrapper } from "@shared/components/field-wrapper/field-wrapper";
 import { StorageService } from '@shared/services/storage.service';
+import { ToastService } from '@shared/services/toast.service';
 import { STORAGE_CONSTANTS } from '@constants/storage.constants';
 import { LoginAPI } from '@core/api/login/login-api.service';
 
 @Component({
  selector: 'app-login',
- imports: [Button, Input, Password, FieldWrapper, NgClass],
+ imports: [Button, Input, Password, FieldWrapper],
  templateUrl: './login.html'
 })
 export class Login {
  private readonly loginAPI = inject(LoginAPI)
  private readonly storageService = inject(StorageService)
+ private readonly toastService = inject(ToastService)
  private readonly router = inject(Router)
 
  formData = this.initialFormState()
  loginBtnLoader = false
- feedbackMessage = ''
- feedbackType: 'success' | 'error' = 'error'
 
  ngOnInit() { }
 
@@ -47,7 +46,6 @@ export class Login {
  }
 
  handleValidations(): void {
-  this.feedbackMessage = ''
   let msg = ''
   const login_name = (this.formData.login_name || '').trim()
   const password = (this.formData.password || '').trim()
@@ -88,7 +86,6 @@ export class Login {
  }
 
  private presentFeedback(message: string, type: 'success' | 'error') {
-  this.feedbackMessage = message
-  this.feedbackType = type
+  this.toastService[type](message)
  }
 }

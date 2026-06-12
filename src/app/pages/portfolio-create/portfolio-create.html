@@ -6,15 +6,6 @@
    <p class="mt-2 text-lg text-slate-600">Share your work, skills, and experience with the world.</p>
   </div>
 
-  <!-- Feedback Message -->
-  @if (feedbackMessage) {
-  <div [ngClass]="feedbackType === 'success'
-        ? 'border-emerald-200 bg-emerald-50 text-emerald-700'
-        : 'border-rose-200 bg-rose-50 text-rose-700'" class="mb-6 rounded-2xl border px-4 py-3 text-sm">
-   {{ feedbackMessage }}
-  </div>
-  }
-
   <!-- Form Container -->
   <div class="rounded-3xl bg-white shadow-xl overflow-hidden">
    <div class="bg-indigo-600 px-8 py-6 text-white">

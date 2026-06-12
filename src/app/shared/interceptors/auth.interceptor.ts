@@ -2,9 +2,11 @@ import { HttpInterceptorFn } from "@angular/common/http"
 import { inject } from "@angular/core"
 import { Router } from "@angular/router"
 import { catchError, finalize, throwError } from "rxjs"
+import { ToastService } from "@shared/services/toast.service"
 
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
  const router = inject(Router)
+ const toastService = inject(ToastService)
  // Util.LOADER_ON.next(true)
 
  const token = localStorage.getItem("token")
@@ -18,10 +20,10 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
 
    if (error.status === 401) {
     localStorage.clear()
-    alert("Session expired. Please log in again.")
+    toastService.error("Session expired. Please log in again.")
     router.navigate(["/login"])
    } else if (error.status === 403) {
-    alert("You do not have permission to perform this action.")
+    toastService.error("You do not have permission to perform this action.")
    }
 
    return throwError(() => error)

@@ -1,26 +1,25 @@
 import { Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
-import { NgClass } from '@angular/common';
 import { FieldWrapper } from "@shared/components/field-wrapper/field-wrapper";
 import { Password } from "@shared/components/password/password";
 import { Button } from "@shared/components/button/button";
 import { Input } from "@shared/components/input/input";
 import { APP_ROUTES, LAYOUT_ROUTES } from '@constants/route.constants';
 import { LoginAPI } from '@core/api/login/login-api.service';
+import { ToastService } from '@shared/services/toast.service';
 
 @Component({
  selector: 'app-signup',
- imports: [FieldWrapper, Password, Button, Input, NgClass],
+ imports: [FieldWrapper, Password, Button, Input],
  templateUrl: './signup.html'
 })
 export class Signup {
  private readonly loginAPI = inject(LoginAPI)
+ private readonly toastService = inject(ToastService)
  private readonly router = inject(Router)
 
  formData = this.initialFormState()
  loginBtnLoader = false
- feedbackMessage = ''
- feedbackType: 'success' | 'error' = 'error'
 
  ngOnInit() { }
 
@@ -42,7 +41,6 @@ export class Signup {
  }
 
  handleValidations(): void {
-  this.feedbackMessage = ''
   let msg = ''
   const fname = (this.formData.fname || '').trim()
   const lname = (this.formData.lname || '').trim()
@@ -82,7 +80,6 @@ export class Signup {
  }
 
  private presentFeedback(message: string, type: 'success' | 'error') {
-  this.feedbackMessage = message
-  this.feedbackType = type
+  this.toastService[type](message)
  }
 }

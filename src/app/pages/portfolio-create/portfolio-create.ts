@@ -1,9 +1,9 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { NgClass } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { PortfolioAPI } from '@core/api/portfolio/portfolio-api.service';
 import { StorageService } from '@shared/services/storage.service';
+import { ToastService } from '@shared/services/toast.service';
 import { PortfolioCreateRequest, UserInfo, Service, Project, TechStack, ContactInfo } from '@core/api/portfolio/portfolio-api.interface';
 import { APP_ROUTES, LAYOUT_ROUTES } from '@constants/route.constants';
 import { STORAGE_CONSTANTS } from '@constants/storage.constants';
@@ -12,16 +12,15 @@ import { UserData } from '@core/api/login/login-api.interface';
 @Component({
  selector: 'app-portfolio-create',
  standalone: true,
- imports: [NgClass, FormsModule],
+ imports: [FormsModule],
  templateUrl: './portfolio-create.html',
  styleUrls: ['./portfolio-create.scss']
 })
 export class PortfolioCreate implements OnInit {
  private readonly portfolioApi = inject(PortfolioAPI);
  private readonly storageService = inject(StorageService);
+ private readonly toastService = inject(ToastService);
  private readonly router = inject(Router);
-
- // Form state
  portfolioName = '';
  userInfo: UserInfo = {
   name: '',
@@ -41,8 +40,6 @@ export class PortfolioCreate implements OnInit {
 
  // UI state
  isSubmitting = false;
- feedbackMessage = '';
- feedbackType: 'success' | 'error' = 'success';
  userId = '';
 
  // Temporary service/project forms
@@ -149,12 +146,7 @@ export class PortfolioCreate implements OnInit {
  }
 
  setFeedback(message: string, type: 'success' | 'error') {
-  alert(message)
-  // this.feedbackMessage = message;
-  // this.feedbackType = type;
-  // setTimeout(() => {
-  //  this.feedbackMessage = '';
-  // }, 5000);
+  this.toastService[type](message)
  }
 
  submitPortfolio() {
