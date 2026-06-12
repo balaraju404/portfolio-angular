@@ -10,6 +10,7 @@ export const LAYOUT_ROUTES = {
  forgor_password: "fp",
  home: "home",
  portfolio: "portfolio",
+ portfolio_create: "portfolio-create",
  about: "about",
  contact_us: "contactus"
 }

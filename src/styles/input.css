@@ -1,1 +1,5 @@
 @import "tailwindcss";
+
+.portfolio-tab {
+ @apply px-2 py-1 border border-(--color-primary) text-(--color-primary) rounded bg-white cursor-pointer;
+}
