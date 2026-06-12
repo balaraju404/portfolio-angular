@@ -36,6 +36,17 @@ ng build
 
 This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
 
+### Environment configuration
+
+This project uses Angular environment files for runtime configuration:
+
+- `src/environments/environment.ts` for development
+- `src/environments/environment.prod.ts` for production
+
+The API base URL is read from the active environment file, so you can update `apiUrl` there for your local or deployed backend.
+
+The production build automatically replaces the development environment file with the production one.
+
 ## Running unit tests
 
 To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
