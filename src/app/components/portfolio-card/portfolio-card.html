@@ -1,5 +1,6 @@
 <article
- class="portfolio-card bg-white shadow-lg ring-1 ring-slate-200 transition hover:-translate-y-1 hover:shadow-2xl">
+ class="portfolio-card bg-white shadow-lg ring-1 ring-slate-200 transition hover:-translate-y-1 hover:shadow-2xl"
+ (click)="openPortfolio()">
  <div class="relative overflow-hidden bg-slate-900">
   @if (portfolio()?.user_info?.img) {
   <img class="absolute inset-0 h-full w-full object-cover opacity-80" src="{{portfolio()?.user_info?.img}}"

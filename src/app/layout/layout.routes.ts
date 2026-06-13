@@ -4,6 +4,7 @@ import { LAYOUT_ROUTES } from "@constants/route.constants";
 export const layoutRoutes: Routes = [
  {
   path: LAYOUT_ROUTES.base, loadComponent: () => import('./layout.component').then(m => m.LayoutComponent), children: [
+   { path: '', redirectTo: LAYOUT_ROUTES.home, pathMatch: 'full' },
    { path: LAYOUT_ROUTES.login, loadComponent: () => import("../pages/login/login").then(m => m.Login) },
    { path: LAYOUT_ROUTES.signup, loadComponent: () => import("../pages/signup/signup").then(m => m.Signup) },
    { path: LAYOUT_ROUTES.forgor_password, loadComponent: () => import("../pages/forgot-password/forgot-password").then(m => m.ForgotPassword) },
