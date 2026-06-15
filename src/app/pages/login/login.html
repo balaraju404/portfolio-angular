@@ -1,8 +1,8 @@
-<div class="flex items-center justify-center bg-slate-50">
- <div class="w-full max-w-md rounded-4xl border border-slate-200 bg-white shadow-xl">
-  <div class="rounded-t-4xl bg-indigo-600 p-8 text-center text-white">
+<div class="flex items-center justify-center page-shell">
+ <div class="w-full max-w-md surface-card">
+  <div class="rounded-t-4xl surface-accent p-8 text-center">
    <p class="text-2xl font-semibold">Welcome back</p>
-   <p class="mt-2 text-sm text-indigo-100">Sign in to access your portfolio dashboard and curated showcases.</p>
+   <p class="mt-2 text-sm text-on-primary">Sign in to access your portfolio dashboard and curated showcases.</p>
   </div>
 
   <div class="p-8 space-y-6">
@@ -20,10 +20,10 @@
     <lib-button [loading]="loginBtnLoader" (buttonClick)="handleLoginEvent()" class="w-full">Login</lib-button>
    </div>
 
-   <div class="flex flex-col gap-3 text-sm text-slate-600 sm:flex-row sm:items-center sm:justify-between">
-    <button type="button" class="text-left text-slate-500 transition hover:text-indigo-600"
+   <div class="flex flex-col gap-3 text-sm text-secondary sm:flex-row sm:items-center sm:justify-between">
+    <button type="button" class="text-left link-muted transition link-primary"
      (click)="gotoForgotPassword()">Forgot password?</button>
-    <button type="button" class="text-left text-indigo-600 font-semibold transition hover:text-indigo-700"
+    <button type="button" class="text-left link-primary font-semibold transition"
      (click)="gotoSignupPage()">Create account</button>
    </div>
   </div>

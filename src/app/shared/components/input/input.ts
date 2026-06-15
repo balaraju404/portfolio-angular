@@ -8,7 +8,7 @@ import {
 @Component({
  selector: 'lib-input',
  templateUrl: './input.html',
- styleUrl: './input.scss',
+ styleUrls: ['./input.scss'],
  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Input {

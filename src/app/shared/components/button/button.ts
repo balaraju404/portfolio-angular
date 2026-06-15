@@ -8,7 +8,7 @@ import {
 @Component({
  selector: 'lib-button',
  templateUrl: './button.html',
- styleUrl: './button.scss',
+ styleUrls: ['./button.scss'],
  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Button {

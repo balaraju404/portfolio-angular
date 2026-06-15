@@ -17,18 +17,18 @@
  --button-border-width: 1px;
  --button-border-style: solid;
  --button-border-color: transparent;
- --button-border-radius: 0.5rem;
+ --button-border-radius: 0.75rem;
 
  /* Effects */
- --button-shadow: none;
+ --button-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
  --button-transition:
   opacity 150ms ease,
   transform 150ms ease,
   box-shadow 150ms ease;
 
  /* State */
- --button-hover-opacity: 0.9;
- --button-active-opacity: 0.8;
+ --button-hover-opacity: 0.95;
+ --button-active-opacity: 0.9;
  --button-disabled-opacity: 0.5;
  --button-active-transform: translateY(1px);
 
@@ -37,7 +37,7 @@
  --button-focus-outline-offset: 2px;
 
  /* Layout */
- --button-min-height: 2.5rem;
+ --button-min-height: 2.75rem;
  --button-width: 100%;
 
  /* Cursor */
@@ -46,6 +46,12 @@
 
  width: var(--button-width);
  display: inline-block;
+}
+
+:host(.primary-outline) button {
+ --button-background: transparent;
+ --button-color: var(--color-primary);
+ --button-border-color: var(--color-primary);
 }
 
 button {

@@ -9,7 +9,7 @@ import {
 @Component({
  selector: 'lib-password',
  templateUrl: './password.html',
- styleUrl: './password.scss',
+ styleUrls: ['./password.scss'],
  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Password {

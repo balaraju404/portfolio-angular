@@ -18,7 +18,7 @@
  justify-content: space-between;
  gap: var(--space-3);
  font-family: var(--font-family);
- color: white;
+ color: var(--color-white);
  animation: toast-slide-in var(--duration-normal) var(--ease-default);
 }
 

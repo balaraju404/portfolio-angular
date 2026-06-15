@@ -7,7 +7,7 @@ import {
 @Component({
  selector: 'lib-field-wrapper',
  templateUrl: './field-wrapper.html',
- styleUrl: './field-wrapper.scss',
+ styleUrls: ['./field-wrapper.scss'],
  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FieldWrapper {
