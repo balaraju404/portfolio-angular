@@ -22,14 +22,18 @@
       every item easy to scan and impressive.</p>
     </div>
 
-    <div class="grid gap-4 sm:grid-cols-2">
+    <div class="grid gap-4 sm:grid-cols-3">
      <div class="surface-card p-5">
-      <p class="text-3xl font-semibold text-primary">120+</p>
+      <p class="text-3xl font-semibold text-primary">{{dashboardData.portfolios_created}}+</p>
       <p class="mt-2 text-sm text-muted">Portfolios created</p>
      </div>
      <div class="surface-card p-5">
-      <p class="text-3xl font-semibold text-primary">30+</p>
-      <p class="mt-2 text-sm text-muted">Design tools supported</p>
+      <p class="text-3xl font-semibold text-primary">{{dashboardData.portfolio_sections}}+</p>
+      <p class="mt-2 text-sm text-muted">Portfolios sections</p>
+     </div>
+     <div class="surface-card p-5">
+      <p class="text-3xl font-semibold text-primary">{{dashboardData.portfolio_templates}}+</p>
+      <p class="mt-2 text-sm text-muted">Portfolios templates</p>
      </div>
     </div>
    </div>

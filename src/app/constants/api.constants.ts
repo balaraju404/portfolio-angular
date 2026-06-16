@@ -12,3 +12,9 @@ export const PORTFOLIO_ENDPOINT_URLS = {
  list: `${PORTFOLIO_ENDPOINT}/list`,
  details: `${PORTFOLIO_ENDPOINT}/details`
 }
+
+/** PUBLIC */
+const PUBLIC_ENDPOINT = "public"
+export const PUBLIC_ENDPOINT_URLS = {
+ dashboard: `${PUBLIC_ENDPOINT}/dashboard`
+}
