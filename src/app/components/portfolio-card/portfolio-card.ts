@@ -1,6 +1,6 @@
 import { Component, input } from '@angular/core';
+import { PORTFOLIO_URL } from '@constants/constants';
 import { PortfolioCardData } from '@core/api/portfolio/portfolio-api.interface';
-import { Constants } from '@core/services/constants.service';
 
 @Component({
  selector: 'app-portfolio-card',
@@ -56,6 +56,6 @@ export class PortfolioCard {
  readonly portfolio = input<PortfolioCardData>()
 
  openPortfolio(): void {
-  window.open(`${Constants.PORTFOLIO_URL}/${this.portfolio()?.portfolio_name}`, '_blank')
+  window.open(`${PORTFOLIO_URL}/${this.portfolio()?.portfolio_name}`, '_blank')
  }
 }
