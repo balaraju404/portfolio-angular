@@ -1,6 +1,4 @@
 import { Component, inject } from '@angular/core';
-import { Router } from '@angular/router';
-import { APP_ROUTES, LAYOUT_ROUTES } from '@constants/route.constants';
 import { Button } from '@shared/components/button/button';
 import { Input } from '@shared/components/input/input';
 import { Password } from '@shared/components/password/password';
@@ -8,6 +6,7 @@ import { FieldWrapper } from '@shared/components/field-wrapper/field-wrapper';
 import { ToastService } from '@shared/services/toast.service';
 import { LoginAPI } from '@core/api/login/login-api.service';
 import { UserStore } from 'src/app/store/user.store';
+import { NavigationService } from '@shared/services/navigation.service';
 
 @Component({
  selector: 'app-login',
@@ -23,7 +22,7 @@ export class Login {
  private readonly loginAPI = inject(LoginAPI);
  private readonly userStore = inject(UserStore);
  private readonly toastService = inject(ToastService);
- private readonly router = inject(Router);
+ readonly navigation = inject(NavigationService);
 
  formData = this.initialFormState();
 
@@ -45,14 +44,6 @@ export class Login {
   }
 
   this.checkLogin();
- }
-
- gotoSignupPage(): void {
-  this.router.navigate([APP_ROUTES.layout, LAYOUT_ROUTES.signup]);
- }
-
- gotoForgotPassword(): void {
-  this.router.navigate([APP_ROUTES.layout, LAYOUT_ROUTES.forgor_password]);
  }
 
  private validateForm(): string | null {
@@ -89,7 +80,7 @@ export class Login {
 
     this.userStore.setUser(response.data);
     this.presentFeedback(response.msg || 'Successfully logged in', 'success');
-    this.router.navigate([APP_ROUTES.layout, LAYOUT_ROUTES.home]);
+    this.navigation.goToHome()
    }, error: () => {
     this.loginBtnLoader = false;
     this.presentFeedback('Unable to login', 'error');

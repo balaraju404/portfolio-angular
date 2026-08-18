@@ -241,7 +241,7 @@
      <button type="button" (click)="submitPortfolio()" [disabled]="isSubmitting()" class="button-primary flex-1">
       {{ isSubmitting() ? 'Creating...' : 'Create Portfolio' }}
      </button>
-     <button type="button" (click)="gotoPortfolio()" class="button-secondary">
+     <button type="button" (click)="navigation.goToPortfolio()" class="button-secondary">
       Cancel
      </button>
     </div>

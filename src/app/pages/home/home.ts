@@ -1,11 +1,10 @@
 import { Component, DestroyRef, inject, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { finalize } from 'rxjs';
-import { Router } from '@angular/router';
-import { APP_ROUTES, LAYOUT_ROUTES } from '@constants/route.constants';
 import { DashboardData } from '@core/api/public/public-api.interface';
 import { PublicAPI } from '@core/api/public/public-api.service';
 import { UserStore } from 'src/app/store/user.store';
+import { NavigationService } from '@shared/services/navigation.service';
 
 @Component({
  selector: 'app-home',
@@ -13,9 +12,9 @@ import { UserStore } from 'src/app/store/user.store';
  templateUrl: './home.html',
 })
 export class Home {
- private readonly router = inject(Router);
  private readonly publicApi = inject(PublicAPI);
  private readonly destroyRef = inject(DestroyRef);
+ readonly navigation = inject(NavigationService);
 
  readonly userStore = inject(UserStore);
 
@@ -29,18 +28,6 @@ export class Home {
 
  constructor() {
   this.fetchDashboardData();
- }
-
- gotoPortfolio(): void {
-  this.router.navigate([APP_ROUTES.layout, LAYOUT_ROUTES.portfolio]);
- }
-
- getStarted(): void {
-  const route = this.userStore.isLoggedIn()
-   ? LAYOUT_ROUTES.portfolio_create
-   : LAYOUT_ROUTES.login;
-
-  this.router.navigate([APP_ROUTES.layout, route]);
  }
 
  private fetchDashboardData(): void {

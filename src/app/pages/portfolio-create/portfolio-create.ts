@@ -1,12 +1,11 @@
 import { Component, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
 import { finalize } from 'rxjs';
-import { APP_ROUTES, LAYOUT_ROUTES } from '@constants/route.constants';
 import { ContactInfo, PortfolioCreateRequest, Project, Service, TechStack, UserInfo } from '@core/api/portfolio/portfolio-api.interface';
 import { PortfolioAPI } from '@core/api/portfolio/portfolio-api.service';
 import { ToastService } from '@shared/services/toast.service';
 import { UserStore } from 'src/app/store/user.store';
+import { NavigationService } from '@shared/services/navigation.service';
 
 @Component({
  selector: 'app-portfolio-create',
@@ -17,10 +16,10 @@ import { UserStore } from 'src/app/store/user.store';
 })
 export class PortfolioCreate {
  private readonly portfolioApi = inject(PortfolioAPI);
- private readonly router = inject(Router);
  private readonly toastService = inject(ToastService);
 
  readonly userStore = inject(UserStore);
+ readonly navigation = inject(NavigationService);
 
  // --------------------------------------------------
  // UI state
@@ -231,7 +230,7 @@ export class PortfolioCreate {
 
   if (!userId) {
    this.showError('Please login before creating a portfolio.');
-   this.gotoLogin();
+   this.navigation.goToLogin();
    return;
   }
 
@@ -260,7 +259,7 @@ export class PortfolioCreate {
      }
 
      this.toastService.success(response.msg || 'Portfolio created successfully.');
-     this.gotoPortfolio();
+     this.navigation.goToPortfolio();
     },
 
     error: (error) => {
@@ -372,17 +371,5 @@ export class PortfolioCreate {
 
  private showError(message: string): void {
   this.toastService.error(message);
- }
-
- // ==================================================
- // NAVIGATION
- // ==================================================
-
- gotoLogin(): void {
-  this.router.navigate([APP_ROUTES.layout, LAYOUT_ROUTES.login]);
- }
-
- gotoPortfolio(): void {
-  this.router.navigate([APP_ROUTES.layout, LAYOUT_ROUTES.portfolio]);
  }
 }

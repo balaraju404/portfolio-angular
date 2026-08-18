@@ -1,12 +1,11 @@
 import { Component, inject } from '@angular/core';
-import { Router } from '@angular/router';
 import { FieldWrapper } from "@shared/components/field-wrapper/field-wrapper";
 import { Password } from "@shared/components/password/password";
 import { Button } from "@shared/components/button/button";
 import { Input } from "@shared/components/input/input";
-import { APP_ROUTES, LAYOUT_ROUTES } from '@constants/route.constants';
 import { LoginAPI } from '@core/api/login/login-api.service';
 import { ToastService } from '@shared/services/toast.service';
+import { NavigationService } from '@shared/services/navigation.service';
 
 @Component({
  selector: 'app-signup',
@@ -16,7 +15,7 @@ import { ToastService } from '@shared/services/toast.service';
 export class Signup {
  private readonly loginAPI = inject(LoginAPI)
  private readonly toastService = inject(ToastService)
- private readonly router = inject(Router)
+ readonly navigation = inject(NavigationService)
 
  formData = this.initialFormState()
  loginBtnLoader = false
@@ -34,10 +33,6 @@ export class Signup {
 
  handleLoginEvent(): void {
   this.handleValidations()
- }
-
- gotoLoginPage(): void {
-  this.router.navigate([APP_ROUTES.layout, LAYOUT_ROUTES.login])
  }
 
  handleValidations(): void {
@@ -67,7 +62,7 @@ export class Signup {
     this.loginBtnLoader = false
     if (res['status']) {
      this.presentFeedback(res['msg'] || 'Account created successfully', 'success')
-     setTimeout(() => this.router.navigate([APP_ROUTES.layout, LAYOUT_ROUTES.login]), 1200)
+     setTimeout(() => this.navigation.goToLogin(), 1200)
     } else {
      this.presentFeedback(res['msg'] || 'Unable to create account', 'error')
     }

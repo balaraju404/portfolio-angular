@@ -12,15 +12,9 @@
   </div>
 
   <div class="flex flex-wrap items-center gap-3">
-   @if (userStore.isLoggedIn()) {
-   <button type="button" (click)="createPortfolio()" class="button-primary">
+   <button type="button" (click)="navigation.goToCreatePortfolio()" class="button-primary">
     Create Portfolio
    </button>
-   } @else {
-   <button type="button" (click)="navigateToLogin()" class="button-secondary">
-    Login to create
-   </button>
-   }
   </div>
  </div>
 
@@ -42,7 +36,7 @@
  <div class="surface-card p-8 text-center text-secondary">
   <p class="text-lg font-medium text-strong">Sign in to view and manage your portfolio</p>
   <p class="mt-2 text-sm text-secondary">Your private and public portfolio items appear here once you are loggedin.</p>
-  <button type="button" (click)="navigateToLogin()" class="button-primary mt-6">
+  <button type="button" (click)="navigation.goToLogin()" class="button-primary mt-6">
    Login now
   </button>
  </div>

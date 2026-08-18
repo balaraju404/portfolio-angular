@@ -41,9 +41,7 @@
 
      <div class="grid gap-3">
       <lib-button [loading]="loginBtnLoader" (buttonClick)="handleLoginEvent()">Create account</lib-button>
-      <button type="button"
-       class="button-secondary rounded-2xl"
-       (click)="gotoLoginPage()">
+      <button type="button" class="button-secondary rounded-2xl" (click)="navigation.goToLogin()">
        Back to login
       </button>
      </div>

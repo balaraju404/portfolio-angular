@@ -48,11 +48,11 @@
     } @else {
 
     <!-- Logged out -->
-    <button type="button" (click)="gotoLogin()" class="button-secondary rounded-full">
+    <button type="button" (click)="navigation.goToLogin()" class="button-secondary rounded-full">
      Login
     </button>
 
-    <button type="button" (click)="gotoSignup()" class="button-primary hidden md:inline-flex">
+    <button type="button" (click)="navigation.goToSignup()" class="button-primary hidden md:inline-flex">
      Sign Up
     </button>
 
@@ -92,11 +92,11 @@
 
     } @else {
 
-    <button type="button" (click)="gotoLogin()" class="button-secondary w-full text-left">
+    <button type="button" (click)="navigation.goToLogin()" class="button-secondary w-full text-left">
      Login
     </button>
 
-    <button type="button" (click)="gotoSignup()" class="button-primary w-full text-left">
+    <button type="button" (click)="navigation.goToSignup()" class="button-primary w-full text-left">
      Sign Up
     </button>
 

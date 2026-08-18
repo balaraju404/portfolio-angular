@@ -1,12 +1,11 @@
 import { Component, DestroyRef, inject, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { catchError, finalize, of, tap } from 'rxjs';
-import { Router } from '@angular/router';
-import { APP_ROUTES, LAYOUT_ROUTES } from '@constants/route.constants';
 import { PortfolioAPI } from '@core/api/portfolio/portfolio-api.service';
 import { PortfolioCardData } from '@core/api/portfolio/portfolio-api.interface';
 import { PortfolioCard } from 'src/app/components/portfolio-card/portfolio-card';
 import { UserStore } from 'src/app/store/user.store';
+import { NavigationService } from '@shared/services/navigation.service';
 
 type TabType = 'public' | 'mine';
 
@@ -17,10 +16,10 @@ type TabType = 'public' | 'mine';
 })
 export class Portfolio {
  private readonly portfolioApi = inject(PortfolioAPI);
- private readonly router = inject(Router);
  private readonly destroyRef = inject(DestroyRef);
 
  readonly userStore = inject(UserStore);
+ readonly navigation = inject(NavigationService);
 
  readonly tabs = [
   { id: 'public', label: 'Public Portfolios' },
@@ -43,19 +42,6 @@ export class Portfolio {
 
   this.selectedTab.set(tab);
   this.loadPortfolios();
- }
-
- createPortfolio(): void {
-  if (!this.userStore.isLoggedIn()) {
-   this.navigateToLogin();
-   return;
-  }
-
-  this.router.navigate([APP_ROUTES.layout, LAYOUT_ROUTES.portfolio_create]);
- }
-
- navigateToLogin(): void {
-  this.router.navigate([APP_ROUTES.layout, LAYOUT_ROUTES.login]);
  }
 
  private loadPortfolios(): void {

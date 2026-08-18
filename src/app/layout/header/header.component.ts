@@ -2,8 +2,9 @@ import { Component, computed, inject } from '@angular/core';
 import { NavigationEnd, Router, } from '@angular/router';
 import { filter, map, startWith } from 'rxjs';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { APP_ROUTES, LAYOUT_ROUTES } from '@constants/route.constants';
+import { LAYOUT_ROUTES } from '@constants/route.constants';
 import { UserStore } from 'src/app/store/user.store';
+import { NavigationService } from '@shared/services/navigation.service';
 
 interface TabInterface {
  name: string;
@@ -16,14 +17,14 @@ interface TabInterface {
 })
 export class HeaderComponent {
  private readonly router = inject(Router);
-
+ readonly navigation = inject(NavigationService);
  readonly userStore = inject(UserStore);
 
  readonly tabsList: TabInterface[] = [
-  { name: 'Home', link: 'home' },
-  { name: 'Portfolio', link: 'portfolio' },
-  { name: 'About', link: 'about' },
-  { name: 'Contact Us', link: 'contactus' },
+  { name: 'Home', link: LAYOUT_ROUTES.home },
+  { name: 'Portfolio', link: LAYOUT_ROUTES.portfolio },
+  { name: 'About', link: LAYOUT_ROUTES.about },
+  { name: 'Contact Us', link: LAYOUT_ROUTES.contact_us },
  ];
 
  mobileOpen = false;
@@ -50,21 +51,13 @@ export class HeaderComponent {
   this.navigateToRoute(tab.link);
  }
 
- gotoLogin(): void {
-  this.navigateToRoute(LAYOUT_ROUTES.login);
- }
-
- gotoSignup(): void {
-  this.navigateToRoute(LAYOUT_ROUTES.signup);
- }
-
  logout(): void {
   this.userStore.clearUser();
-  this.navigateToRoute(LAYOUT_ROUTES.login);
+  this.navigation.goToLogin()
  }
 
  private navigateToRoute(link: string): void {
   this.mobileOpen = false;
-  this.router.navigate([APP_ROUTES.layout, link]);
+  this.navigation.layoutRoute(link);
  }
 }
