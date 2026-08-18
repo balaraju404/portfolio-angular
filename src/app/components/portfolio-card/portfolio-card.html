@@ -1,53 +1,98 @@
 <article
- class="portfolio-card surface-card interactive-card"
- (click)="openPortfolio()">
- <div class="relative overflow-hidden portfolio-cover">
-  @if (portfolio()?.user_info?.img) {
-  <img class="absolute inset-0 h-full w-full object-cover opacity-80" src="{{portfolio()?.user_info?.img}}"
-   alt="{{portfolio()?.user_info?.name}} banner" />
-  }
-  <div class="absolute inset-0 overlay-gradient"></div>
-  <div class="relative flex items-end gap-4 p-4">
-   <div class="avatar">
-    @if (portfolio()?.user_info?.img) {
-    <img class="h-full w-full object-cover" src="{{portfolio()?.user_info?.img}}"
-     alt="{{portfolio()?.user_info?.name}} avatar" />
-    } @else {
-    <div class="flex h-full w-full items-center justify-center surface-accent-soft text-secondary">?</div>
-    }
-   </div>
-   <div class="text-white">
-    <h2 class="text-lg font-semibold">{{portfolio()?.user_info?.name}}</h2>
-    <p class="text-sm text-secondary">{{portfolio()?.user_info?.role}}</p>
-   </div>
+ class="group relative flex h-full min-h-97.5 w-full flex-col overflow-hidden rounded-2xl bg-(--color-surface-elevated) shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg">
+
+ <!-- User header -->
+ <div class="flex items-center gap-3 border-b border-b-(--color-border) p-4">
+  @if (portfolio().user_info.img) {
+  <img [src]="portfolio().user_info.img" [alt]="portfolio().user_info.name"
+   class="size-11 shrink-0 rounded-full object-cover" />
+  } @else {
+  <div
+   class="flex size-11 shrink-0 items-center justify-center rounded-full bg-(--color-primary) text-sm font-medium text-white">
+   {{ initials() }}
   </div>
+  }
+
+  <div class="min-w-0 flex-1">
+   <h3 class="truncate text-sm font-semibold text-(--color-text)"> {{ portfolio().user_info.name }} </h3>
+   <p class="mt-0.5 truncate text-sm text-(--color-text-muted)"> {{ portfolio().user_info.role }} </p>
+  </div>
+
+  <button type="button" aria-label="More portfolio options"
+   class="flex size-8 shrink-0 items-center justify-center rounded-lg text-(--color-text-muted) transition-colors hover:bg-(--color-surface-hover) hover:text-(--color-text-secondary)">
+   <svg class="size-4" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+    <circle cx="5" cy="12" r="1.5" />
+    <circle cx="12" cy="12" r="1.5" />
+    <circle cx="19" cy="12" r="1.5" />
+   </svg>
+  </button>
  </div>
 
- <div class="flex flex-col gap-4 p-5">
-  <div class="space-y-3">
-   <div class="text-base font-semibold text-strong">{{portfolio()?.portfolio_name}}</div>
-   <p class="text-sm leading-6 text-secondary">{{portfolio()?.user_info?.about}}</p>
+ <!-- Main content -->
+ <div class="flex flex-1 flex-col p-4">
+
+  <!-- Portfolio information -->
+  <div class="">
+   <div class="text-xs font-medium uppercase tracking-wide text-(--color-primary)"> Portfolio </div>
+   <h2 class="mt-1 text-lg font-semibold text-(--color-text)"> {{ portfolio().portfolio_name }} </h2>
   </div>
-  <div class="grid grid-cols-2 gap-3 text-sm">
-   <div class="surface-panel p-3">
-    <div class="text-lg font-semibold text-strong">{{portfolio()?.projects_count}}</div>
-    <div class="mt-1 uppercase tracking-[0.18em] text-xs text-muted">Projects</div>
+
+  <!-- About -->
+  <p class="mt-3 line-clamp-2 min-h-10 text-sm leading-5 text-(--color-text-secondary)">
+   {{ portfolio().user_info.about || 'No description available.' }}
+  </p>
+
+  <!-- Location -->
+  <div class="mt-3 flex items-center gap-2 text-sm text-(--color-text-muted)">
+   <svg class="size-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+    aria-hidden="true">
+    <path stroke-linecap="round" stroke-linejoin="round" d="M12 21s7-5.25 7-11a7 7 0 1 0-14 0c0 5.75 7 11 7 11Z" />
+    <circle cx="12" cy="10" r="2.25" />
+   </svg>
+   <span class="truncate"> {{ portfolio().contact_info.address }} </span>
+  </div>
+
+  <!-- Statistics -->
+  <div class="mt-5 grid grid-cols-2 overflow-hidden rounded-xl border border-(--color-border) bg-(--color-bg)">
+   <div class="flex flex-col items-center justify-center border-r border-(--color-border) py-3">
+    <span class="text-base font-semibold text-(--color-text)"> {{ portfolio().projects_count }} </span>
+    <span class="mt-0.5 text-xs text-(--color-text-muted)"> Projects </span>
    </div>
-   <div class="surface-panel p-3">
-    <div class="text-lg font-semibold text-strong">{{portfolio()?.services_count}}</div>
-    <div class="mt-1 uppercase tracking-[0.18em] text-xs text-muted">Services</div>
+
+   <div class="flex flex-col items-center justify-center py-3">
+    <span class="text-base font-semibold text-(--color-text)"> {{ portfolio().services_count }} </span>
+    <span class="mt-0.5 text-xs text-(--color-text-muted)"> Services </span>
    </div>
   </div>
 
-  <div class="flex flex-wrap gap-2">
-   @for (skill of portfolio()?.skills || []; track $index) {
-   <span class="badge-pill">{{skill}}</span>
+  <!-- Skills -->
+  @if (portfolio().skills.length > 0) {
+  <div class="mt-4 flex flex-wrap gap-1.5">
+   @for (skill of visibleSkills(); track skill) {
+   <span class="max-w-40 truncate rounded-full bg-gray-700 px-2.5 py-1 text-xs text-(--color-text-secondary)">
+    {{ skill }}
+   </span>
+   }
+
+   @if (remainingSkills() > 0) {
+   <span class="rounded-full bg-(--color-info-bg) px-2.5 py-1 text-xs font-medium text-(--color-primary)">
+    +{{ remainingSkills() }}
+   </span>
    }
   </div>
+  }
 
-  <div class="surface-panel p-4 text-sm text-secondary">
-   <div class="font-medium text-strong">Location</div>
-   <p class="mt-1">{{portfolio()?.contact_info?.address}}</p>
-  </div>
  </div>
+
+ <!-- Footer -->
+ <div class="border-t border-(--color-border) p-4">
+  <button type="button" (click)="viewPortfolio()"
+   class="flex h-10 w-full items-center justify-center gap-2 rounded-xl bg-gray-900 text-sm font-medium text-white transition-colors hover:bg-(--color-primary)">
+   View Portfolio
+   <svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+    <path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14m-5-5 5 5-5 5" />
+   </svg>
+  </button>
+ </div>
+
 </article>
