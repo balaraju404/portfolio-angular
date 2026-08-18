@@ -27,8 +27,7 @@
      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
       <div>
        <label class="block text-sm font-semibold text-strong mb-2">Full Name *</label>
-       <input type="text" [(ngModel)]="userInfo.name" name="userName" placeholder="Your name"
-        class="form-input" />
+       <input type="text" [(ngModel)]="userInfo.name" name="userName" placeholder="Your name" class="form-input" />
       </div>
       <div>
        <label class="block text-sm font-semibold text-strong mb-2">Professional Role *</label>
@@ -70,8 +69,7 @@
       <div>
        <label class="block text-sm font-semibold text-strong mb-2">Alternative Email</label>
        <input type="email" [(ngModel)]="contactInfo.alternative_email" name="altEmail"
-        placeholder="alternative@email.com"
-        class="form-input" />
+        placeholder="alternative@email.com" class="form-input" />
       </div>
      </div>
      <div class="mt-4">
@@ -113,8 +111,7 @@
         <div class="flex gap-2">
          <input type="text" [(ngModel)]="newServiceDescLine" name="serviceDesc" placeholder="Add a description"
           class="form-input" />
-         <button type="button" (click)="addServiceDescription()"
-          class="button-primary">Add</button>
+         <button type="button" (click)="addServiceDescription()" class="button-primary">Add</button>
         </div>
         @if (newService.description && newService.description.length > 0) {
         <div class="mt-2 space-y-1">
@@ -127,8 +124,7 @@
         </div>
         }
        </div>
-       <button type="button" (click)="addService()"
-        class="button-primary">Add
+       <button type="button" (click)="addService()" class="button-primary">Add
         Service</button>
       </div>
      </div>
@@ -215,8 +211,7 @@
            <div class="flex gap-1">
             <input type="text" [(ngModel)]="newTechStackSkill" name="techSkill" placeholder="e.g., Angular"
              class="form-input text-sm" />
-            <button type="button" (click)="addTechStack()"
-             class="button-primary text-sm">Add</button>
+            <button type="button" (click)="addTechStackSkill()" class="button-primary text-sm">Add</button>
            </div>
           </div>
          </div>
@@ -225,20 +220,17 @@
           @for (skill of newTechStack.skills; track $index) {
           <span class="badge-pill gap-1">
            {{ skill }}
-           <button type="button" (click)="removeSkill(newProject.tech_stack?.length || 0, $index)"
-            class="link-primary">×</button>
+           <button type="button" (click)="removeTechStackSkill( $index)" class="link-primary">×</button>
           </span>
           }
          </div>
          }
-         <button type="button" (click)="confirmTechStack()"
-          class="button-primary w-full text-sm">Add
+         <button type="button" (click)="confirmTechStack()" class="button-primary w-full text-sm">Add
           Tech Stack</button>
         </div>
        </div>
 
-       <button type="button" (click)="addProject()"
-        class="button-primary">Add
+       <button type="button" (click)="addProject()" class="button-primary">Add
         Project</button>
       </div>
      </div>
@@ -246,12 +238,10 @@
 
     <!-- Submit Button -->
     <div class="border-t pt-8 flex gap-4">
-     <button type="button" (click)="submitPortfolio()" [disabled]="isSubmitting"
-      class="button-primary flex-1">
-      {{ isSubmitting ? 'Creating...' : 'Create Portfolio' }}
+     <button type="button" (click)="submitPortfolio()" [disabled]="isSubmitting()" class="button-primary flex-1">
+      {{ isSubmitting() ? 'Creating...' : 'Create Portfolio' }}
      </button>
-     <button type="button" (click)="gotoPortfolio()"
-      class="button-secondary">
+     <button type="button" (click)="gotoPortfolio()" class="button-secondary">
       Cancel
      </button>
     </div>

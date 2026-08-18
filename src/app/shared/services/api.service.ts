@@ -1,50 +1,118 @@
-import { inject, Injectable } from "@angular/core"
-import { HttpClient, HttpErrorResponse, HttpParams } from "@angular/common/http"
-import { Observable, throwError } from "rxjs"
-import { catchError } from "rxjs/operators"
+import { inject, Injectable } from '@angular/core';
+import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
+import { Observable, throwError } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 
-@Injectable({ providedIn: "root" })
+type QueryParams = Record<string, string | number | boolean | null | undefined>;
+
+@Injectable({ providedIn: 'root' })
 export class APIService {
- private readonly http: HttpClient = inject(HttpClient)
+ private readonly http = inject(HttpClient);
 
- get(url: string, params?: any): Observable<any> {
-  let httpParams = new HttpParams()
-  if (params) {
-   Object.keys(params).forEach(key => httpParams = httpParams.set(key, params[key]))
+ // --------------------------------------------------
+ // GET
+ // --------------------------------------------------
+
+ get<TResponse>(
+  url: string,
+  params?: QueryParams,
+ ): Observable<TResponse> {
+  return this.http
+   .get<TResponse>(url, { params: this.createParams(params) })
+   .pipe(catchError((error) => this.handleError(error)));
+ }
+
+ // --------------------------------------------------
+ // POST
+ // --------------------------------------------------
+
+ post<TResponse, TBody = unknown>(
+  url: string,
+  body: TBody,
+ ): Observable<TResponse> {
+  return this.http
+   .post<TResponse>(url, body)
+   .pipe(catchError((error) => this.handleError(error)));
+ }
+
+ // --------------------------------------------------
+ // PUT
+ // --------------------------------------------------
+
+ put<TResponse, TBody = unknown>(
+  url: string,
+  body: TBody,
+ ): Observable<TResponse> {
+  return this.http
+   .put<TResponse>(url, body)
+   .pipe(catchError((error) => this.handleError(error)),);
+ }
+
+ // --------------------------------------------------
+ // DELETE
+ // --------------------------------------------------
+
+ delete<TResponse>(
+  url: string,
+  params?: QueryParams,
+ ): Observable<TResponse> {
+  return this.http
+   .delete<TResponse>(url, { params: this.createParams(params) })
+   .pipe(catchError((error) => this.handleError(error)));
+ }
+
+ // --------------------------------------------------
+ // FILE UPLOAD
+ // --------------------------------------------------
+
+ upload<TResponse>(
+  url: string,
+  formData: FormData,
+ ): Observable<TResponse> {
+  return this.http
+   .post<TResponse>(url, formData)
+   .pipe(catchError((error) => this.handleError(error)));
+ }
+
+ // --------------------------------------------------
+ // HTTP PARAMS
+ // --------------------------------------------------
+
+ private createParams(params?: QueryParams): HttpParams {
+  let httpParams = new HttpParams();
+
+  if (!params) {
+   return httpParams;
   }
-  return this.http.get(url, { params }).pipe(catchError(this.handleError))
- }
 
- post(url: string, data: any): Observable<any> {
-  return this.http.post(url, data).pipe(catchError(this.handleError))
- }
+  for (const [key, value] of Object.entries(params)) {
+   if (value === null || value === undefined) {
+    continue;
+   }
 
- put(url: string, data: any): Observable<any> {
-  return this.http.put(url, data).pipe(catchError(this.handleError))
- }
-
- delete(url: string, params?: any): Observable<any> {
-  let httpParams = new HttpParams()
-  if (params) {
-   Object.keys(params).forEach(key => httpParams = httpParams.set(key, params[key]))
-  }
-  return this.http.delete(url, { params }).pipe(catchError(this.handleError))
- }
-
- upload(url: string, formData: FormData): Observable<any> {
-  return this.http.post(url, formData).pipe(catchError(this.handleError))
- }
-
- private handleError(error: HttpErrorResponse) {
-  console.log("API Error:", error)
-
-  let errorMsg = "Something went wrong. Please try again later."
-
-  // Handle different error formats
-  if (error.error.error) {
-   errorMsg = error.error.error
+   httpParams = httpParams.set(key, String(value));
   }
 
-  return throwError(() => errorMsg)
+  return httpParams;
+ }
+
+ // --------------------------------------------------
+ // ERROR HANDLING
+ // --------------------------------------------------
+
+ private handleError(error: HttpErrorResponse): Observable<never> {
+  let message = 'Something went wrong. Please try again later.';
+
+  if (typeof error.error === 'string') {
+   message = error.error;
+  } else if (error.error && typeof error.error === 'object') {
+   message =
+    error.error.msg ??
+    error.error.message ??
+    error.error.error ??
+    message;
+  }
+
+  return throwError(() => message);
  }
 }

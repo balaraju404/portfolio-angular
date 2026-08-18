@@ -12,7 +12,7 @@
   </div>
 
   <div class="flex flex-wrap items-center gap-3">
-   @if (isLoggedIn()) {
+   @if (userStore.isLoggedIn()) {
    <button type="button" (click)="createPortfolio()" class="button-primary">
     Create Portfolio
    </button>
@@ -28,8 +28,7 @@
   <div class="grid grid-cols-2 gap-2">
    @for (tabItem of tabs; track tabItem.id) {
    <button type="button" (click)="selectTab(tabItem.id)" class="w-full rounded-2xl transition focus:outline-none">
-    <span class="tab-pill"
-     [class.tab-pill--active]="tab === tabItem.id"
+    <span class="tab-pill" [class.tab-pill--active]="tab === tabItem.id"
      [class.tab-pill--inactive]="tab !== tabItem.id">
      {{ tabItem.label }}
     </span>
@@ -38,7 +37,7 @@
   </div>
  </div>
 
- @if (tab === 'mine' && !isLoggedIn()) {
+ @if (tab === 'mine' && !userStore.isLoggedIn()) {
 
  <div class="surface-card p-8 text-center text-secondary">
   <p class="text-lg font-medium text-strong">Sign in to view and manage your portfolio</p>
@@ -68,7 +67,7 @@
  } @else {
  <div class="surface-panel p-8 text-center text-muted">
   <p class="text-base font-medium">No portfolios found yet.</p>
-  @if (tab === 'mine' && isLoggedIn()) {
+  @if (tab === 'mine' && userStore.isLoggedIn()) {
   <p class="mt-2 text-sm text-secondary">Create one to see it here.</p>
   }
  </div>

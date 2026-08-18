@@ -1,79 +1,110 @@
 <nav class="app-header">
- <div class="max-w-7xl mx-auto px-4 py-3 sm:px-6 lg:px-8">
+ <div class="mx-auto max-w-7xl px-4 py-3 sm:px-6 lg:px-8">
+
   <div class="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+
+   <!-- Brand -->
    <div class="flex items-center gap-3">
-    <div class="brand-badge">
-     P
-    </div>
+    <div class="brand-badge">P</div>
+
     <div>
      <p class="text-lg font-semibold tracking-tight text-strong">Portfolio</p>
      <p class="text-sm text-muted">Showcase your work and your story</p>
     </div>
    </div>
 
-   <div class="hidden md:flex items-center gap-2">
-    @for (item of tabsList; track $index) {
+   <!-- Desktop navigation -->
+   <div class="hidden items-center gap-2 md:flex">
+    @for (item of tabsList; track item.link) {
     <button type="button" (click)="handleTabEvent(item)"
-     [attr.aria-current]="selectedTab?.link === item.link ? 'page' : null"
-     class="rounded-full px-4 py-2 text-sm font-semibold transition focus:outline-none focus:ring-2 focus:ring-indigo-500 {{ selectedTab?.link === item.link ? 'button-primary' : 'button-secondary' }}">
+     [attr.aria-current]="selectedTab().link === item.link ? 'page' : null"
+     [class.button-primary]="selectedTab().link === item.link"
+     [class.button-secondary]="selectedTab().link !== item.link"
+     class="rounded-full px-4 py-2 text-sm font-semibold transition focus:outline-none focus:ring-2 focus:ring-indigo-500">
      {{ item.name }}
     </button>
     }
    </div>
 
+   <!-- User actions -->
    <div class="flex items-center gap-2">
-    @if (userData) {
-    <div class="hidden items-center gap-3 surface-card px-3 py-2 text-sm md:flex">
-     <div class="profile-badge">{{ userInitials }}</div>
+
+    @if (userStore.isLoggedIn()) {
+
+    <!-- Logged in -->
+    <div class="surface-card hidden items-center gap-3 px-3 py-2 text-sm md:flex">
+     <div class="profile-badge"> {{ userStore.initials() }} </div>
+
      <div class="text-left">
-      <p class="font-semibold">{{ userFullName }}</p>
-      <p class="text-xs text-muted">Signed in</p>
+      <p class="font-semibold"> {{ userStore.displayName() }} </p>
+      <p class="text-xs text-muted"> Signed in </p>
      </div>
     </div>
-    <button type="button" (click)="logout()" class="hidden button-secondary md:inline-flex">
+
+    <button type="button" (click)="logout()" class="button-secondary hidden md:inline-flex">
      Logout
     </button>
+
     } @else {
+
+    <!-- Logged out -->
     <button type="button" (click)="gotoLogin()" class="button-secondary rounded-full">
      Login
     </button>
-    <button type="button" (click)="gotoSignup()" class="hidden button-primary md:inline-flex">
+
+    <button type="button" (click)="gotoSignup()" class="button-primary hidden md:inline-flex">
      Sign Up
     </button>
+
     }
 
+    <!-- Mobile menu -->
     <button type="button" class="button-icon mobile-menu-toggle" (click)="toggleMobile()"
-     [attr.aria-expanded]="mobileOpen ? 'true' : 'false'">
-     <span class="sr-only">Toggle navigation</span>
-     <span>{{ mobileOpen ? 'Close' : 'Menu' }}</span>
+     [attr.aria-expanded]="mobileOpen" aria-controls="mobile-navigation">
+     <span class="sr-only">
+      Toggle navigation
+     </span>
+
+     <span> {{ mobileOpen ? 'Close' : 'Menu' }} </span>
     </button>
+
    </div>
   </div>
 
+  <!-- Mobile navigation -->
   @if (mobileOpen) {
-  <div class="mt-3 surface-card md:hidden">
+  <div id="mobile-navigation" class="surface-card mt-3 md:hidden">
    <div class="space-y-2">
-    @for (item of tabsList; track $index) {
-    <button type="button" (click)="handleTabEvent(item)"
-     class="w-full rounded-2xl text-left text-sm font-semibold transition {{ selectedTab?.link === item.link ? 'button-primary' : 'button-secondary' }}">
+
+    @for (item of tabsList; track item.link) {
+    <button type="button" (click)="handleTabEvent(item)" [class.button-primary]="selectedTab().link === item.link"
+     [class.button-secondary]="selectedTab().link !== item.link"
+     class="w-full rounded-2xl text-left text-sm font-semibold transition">
      {{ item.name }}
     </button>
     }
 
-    @if (userData) {
-    <button type="button" (click)="logout()" class="w-full button-secondary text-left">
+    @if (userStore.isLoggedIn()) {
+
+    <button type="button" (click)="logout()" class="button-secondary w-full text-left">
      Logout
     </button>
+
     } @else {
-    <button type="button" (click)="gotoLogin()" class="w-full button-secondary text-left">
+
+    <button type="button" (click)="gotoLogin()" class="button-secondary w-full text-left">
      Login
     </button>
-    <button type="button" (click)="gotoSignup()" class="w-full button-primary text-left">
+
+    <button type="button" (click)="gotoSignup()" class="button-primary w-full text-left">
      Sign Up
     </button>
+
     }
+
    </div>
   </div>
   }
+
  </div>
 </nav>

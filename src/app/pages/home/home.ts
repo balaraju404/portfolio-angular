@@ -1,52 +1,69 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, DestroyRef, inject, signal } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { finalize } from 'rxjs';
 import { Router } from '@angular/router';
 import { APP_ROUTES, LAYOUT_ROUTES } from '@constants/route.constants';
-import { STORAGE_CONSTANTS } from '@constants/storage.constants';
-import { UserData } from '@core/api/login/login-api.interface';
 import { DashboardData } from '@core/api/public/public-api.interface';
 import { PublicAPI } from '@core/api/public/public-api.service';
-import { StorageService } from '@shared/services/storage.service';
+import { UserStore } from 'src/app/store/user.store';
 
 @Component({
  selector: 'app-home',
- imports: [],
+ standalone: true,
  templateUrl: './home.html',
 })
-export class Home implements OnInit {
- private readonly router = inject(Router)
- private readonly publicAPI = inject(PublicAPI)
- private readonly storageService = inject(StorageService)
+export class Home {
+ private readonly router = inject(Router);
+ private readonly publicApi = inject(PublicAPI);
+ private readonly destroyRef = inject(DestroyRef);
 
- dashboardData: DashboardData = {
+ readonly userStore = inject(UserStore);
+
+ readonly dashboardData = signal<DashboardData>({
   portfolios_created: 0,
   portfolio_sections: 0,
   portfolio_templates: 0
- }
+ });
 
- ngOnInit(): void {
-  this.fetchDashboardData()
+ readonly loading = signal(false);
+
+ constructor() {
+  this.fetchDashboardData();
  }
 
  gotoPortfolio(): void {
-  this.router.navigate([APP_ROUTES.layout, LAYOUT_ROUTES.portfolio])
+  this.router.navigate([APP_ROUTES.layout, LAYOUT_ROUTES.portfolio]);
  }
 
- getStartedEvent(): void {
-  const token = this.storageService.getItem<UserData>(STORAGE_CONSTANTS.token)
-  let path = LAYOUT_ROUTES.login
-  if (token) {
-   path = LAYOUT_ROUTES.portfolio_create
-  }
-  this.router.navigate([APP_ROUTES.layout, path])
+ getStarted(): void {
+  const route = this.userStore.isLoggedIn()
+   ? LAYOUT_ROUTES.portfolio_create
+   : LAYOUT_ROUTES.login;
+
+  this.router.navigate([APP_ROUTES.layout, route]);
  }
 
  private fetchDashboardData(): void {
-  this.publicAPI.dashboard().subscribe({
-   next: res => {
-    if (res.data) {
-     this.dashboardData = res.data
+  this.loading.set(true);
+
+  this.publicApi
+   .dashboard()
+   .pipe(
+    takeUntilDestroyed(this.destroyRef),
+    finalize(() => this.loading.set(false))
+   )
+   .subscribe({
+    next: (response) => {
+     if (!response.status) {
+      return;
+     }
+
+     this.dashboardData.set(response.data);
+    },
+
+    error: () => {
+     // Optionally show a toast here.
     }
-   }
-  })
+   });
  }
 }

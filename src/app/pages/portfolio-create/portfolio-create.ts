@@ -1,197 +1,388 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { PortfolioAPI } from '@core/api/portfolio/portfolio-api.service';
-import { StorageService } from '@shared/services/storage.service';
-import { ToastService } from '@shared/services/toast.service';
-import { PortfolioCreateRequest, UserInfo, Service, Project, TechStack, ContactInfo } from '@core/api/portfolio/portfolio-api.interface';
+import { finalize } from 'rxjs';
 import { APP_ROUTES, LAYOUT_ROUTES } from '@constants/route.constants';
-import { STORAGE_CONSTANTS } from '@constants/storage.constants';
-import { UserData } from '@core/api/login/login-api.interface';
+import { ContactInfo, PortfolioCreateRequest, Project, Service, TechStack, UserInfo } from '@core/api/portfolio/portfolio-api.interface';
+import { PortfolioAPI } from '@core/api/portfolio/portfolio-api.service';
+import { ToastService } from '@shared/services/toast.service';
+import { UserStore } from 'src/app/store/user.store';
 
 @Component({
  selector: 'app-portfolio-create',
  standalone: true,
  imports: [FormsModule],
  templateUrl: './portfolio-create.html',
- styleUrls: ['./portfolio-create.scss']
+ styleUrls: ['./portfolio-create.scss'],
 })
-export class PortfolioCreate implements OnInit {
+export class PortfolioCreate {
  private readonly portfolioApi = inject(PortfolioAPI);
- private readonly storageService = inject(StorageService);
- private readonly toastService = inject(ToastService);
  private readonly router = inject(Router);
+ private readonly toastService = inject(ToastService);
+
+ readonly userStore = inject(UserStore);
+
+ // --------------------------------------------------
+ // UI state
+ // --------------------------------------------------
+
+ readonly isSubmitting = signal(false);
+
+ // --------------------------------------------------
+ // Portfolio form
+ // --------------------------------------------------
+
  portfolioName = '';
+
  userInfo: UserInfo = {
   name: '',
   role: '',
   about: '',
-  img: undefined
+  img: undefined,
  };
- services: Service[] = [];
- projects: Project[] = [];
+
  contactInfo: ContactInfo = {
   mobile_no: '',
   email: '',
   address: '',
   alternative_number: undefined,
-  alternative_email: undefined
+  alternative_email: undefined,
  };
 
- // UI state
- isSubmitting = false;
- userId = '';
+ services: Service[] = [];
 
- // Temporary service/project forms
- newService: Partial<Service> = { title: '', description: [] };
+ projects: Project[] = [];
+
+ // --------------------------------------------------
+ // Service builder
+ // --------------------------------------------------
+
+ newService: Partial<Service> = {
+  title: '',
+  description: []
+ };
+
  newServiceDescLine = '';
- newProject: Partial<Project> = { title: '', description: '', url: '', tech_stack: [] };
- newTechStack: Partial<TechStack> = { cat_name: '', skills: [] };
+
+ // --------------------------------------------------
+ // Project builder
+ // --------------------------------------------------
+
+ newProject: Partial<Project> = {
+  title: '',
+  description: '',
+  url: '',
+  tech_stack: []
+ };
+
+ // --------------------------------------------------
+ // Tech stack builder
+ // --------------------------------------------------
+
+ newTechStack: Partial<TechStack> = {
+  cat_name: '',
+  skills: []
+ };
+
  newTechStackSkill = '';
 
- ngOnInit() {
-  const userData = this.storageService.getItem<UserData>(STORAGE_CONSTANTS.token)
-  if (!userData) {
-   this.gotoLogin()
+ // ==================================================
+ // SERVICES
+ // ==================================================
+
+ addServiceDescription(): void {
+  const description = this.newServiceDescLine.trim();
+
+  if (!description) {
    return;
   }
-  this.userId = userData?.user_id || '';
- }
 
- addServiceDescription() {
-  if (!this.newServiceDescLine.trim()) return;
-  if (!this.newService.description) this.newService.description = [];
-  this.newService.description.push(this.newServiceDescLine);
+  this.newService.description ??= [];
+
+  this.newService.description.push(description);
+
   this.newServiceDescLine = '';
  }
 
- removeServiceDescription(index: number) {
-  if (this.newService.description) {
-   this.newService.description.splice(index, 1);
-  }
+ removeServiceDescription(index: number): void {
+  this.newService.description?.splice(index, 1);
  }
 
- addService() {
-  if (!this.newService.title?.trim() || !this.newService.description?.length) {
-   this.setFeedback('Service must have a title and at least one description line.', 'error');
+ addService(): void {
+  const title = this.newService.title?.trim();
+  const description = this.newService.description ?? [];
+
+  if (!title) {
+   this.showError('Service title is required.');
    return;
   }
+
+  if (!description.length) {
+   this.showError('Add at least one service description.');
+   return;
+  }
+
   this.services.push({
    id: this.services.length + 1,
-   title: this.newService.title,
-   description: this.newService.description
+   title,
+   description: [...description],
   });
-  this.newService = { title: '', description: [] };
-  this.newServiceDescLine = '';
+
+  this.resetServiceForm();
  }
 
- removeService(index: number) {
+ removeService(index: number): void {
   this.services.splice(index, 1);
  }
 
- addTechStack() {
-  if (!this.newTechStack.cat_name?.trim() || !this.newTechStackSkill.trim()) {
-   this.setFeedback('Tech stack must have a category and at least one skill.', 'error');
+ // ==================================================
+ // TECH STACK
+ // ==================================================
+
+ addTechStackSkill(): void {
+  const skill = this.newTechStackSkill.trim();
+
+  if (!skill) {
    return;
   }
-  if (!this.newTechStack.skills) this.newTechStack.skills = [];
-  this.newTechStack.skills.push(this.newTechStackSkill);
+
+  this.newTechStack.skills ??= [];
+
+  this.newTechStack.skills.push(skill);
+
   this.newTechStackSkill = '';
  }
 
- removeSkill(stackIndex: number, skillIndex: number) {
-  if (this.newProject.tech_stack && this.newProject.tech_stack[stackIndex]) {
-   this.newProject.tech_stack[stackIndex].skills?.splice(skillIndex, 1);
-  }
+ removeTechStackSkill(index: number): void {
+  this.newTechStack.skills?.splice(index, 1);
  }
 
- confirmTechStack() {
-  if (!this.newTechStack.cat_name?.trim()) {
-   this.setFeedback('Tech stack category is required.', 'error');
+ confirmTechStack(): void {
+  const category = this.newTechStack.cat_name?.trim();
+  const skills = this.newTechStack.skills ?? [];
+
+  if (!category) {
+   this.showError('Tech stack category is required.');
    return;
   }
-  if (!this.newProject.tech_stack) this.newProject.tech_stack = [];
+
+  if (!skills.length) {
+   this.showError('Add at least one skill.');
+   return;
+  }
+
+  this.newProject.tech_stack ??= [];
+
   this.newProject.tech_stack.push({
    id: this.newProject.tech_stack.length + 1,
-   cat_name: this.newTechStack.cat_name,
-   skills: this.newTechStack.skills || []
+   cat_name: category,
+   skills: [...skills]
   });
-  this.newTechStack = { cat_name: '', skills: [] };
-  this.newTechStackSkill = '';
+
+  this.resetTechStackForm();
  }
 
- removeTechStack(index: number) {
-  if (this.newProject.tech_stack) {
-   this.newProject.tech_stack.splice(index, 1);
-  }
+ removeTechStack(index: number): void {
+  this.newProject.tech_stack?.splice(index, 1);
  }
 
- addProject() {
-  if (!this.newProject.title?.trim() || !this.newProject.description?.trim()) {
-   this.setFeedback('Project must have a title and description.', 'error');
+ // ==================================================
+ // PROJECTS
+ // ==================================================
+
+ addProject(): void {
+  const title = this.newProject.title?.trim();
+  const description =
+   this.newProject.description?.trim();
+
+  if (!title) {
+   this.showError('Project title is required.');
    return;
   }
+
+  if (!description) {
+   this.showError('Project description is required.');
+   return;
+  }
+
   this.projects.push({
    id: this.projects.length + 1,
-   title: this.newProject.title,
-   description: this.newProject.description,
-   url: this.newProject.url,
-   tech_stack: this.newProject.tech_stack
+   title,
+   description,
+   url: this.newProject.url?.trim(),
+   tech_stack: this.cloneTechStack(
+    this.newProject.tech_stack
+   )
   });
-  this.newProject = { title: '', description: '', url: '', tech_stack: [] };
+
+  this.resetProjectForm();
  }
 
- removeProject(index: number) {
+ removeProject(index: number): void {
   this.projects.splice(index, 1);
  }
 
- setFeedback(message: string, type: 'success' | 'error') {
-  this.toastService[type](message)
+ // ==================================================
+ // SUBMIT
+ // ==================================================
+
+ submitPortfolio(): void {
+  const userId = this.userStore.userId();
+
+  if (!userId) {
+   this.showError('Please login before creating a portfolio.');
+   this.gotoLogin();
+   return;
+  }
+
+  if (this.isSubmitting()) {
+   return;
+  }
+
+  const validationError = this.validateForm();
+
+  if (validationError) {
+   this.showError(validationError);
+   return;
+  }
+
+  const request = this.buildRequest(userId);
+  this.isSubmitting.set(true);
+
+  this.portfolioApi
+   .create(request)
+   .pipe(finalize(() => this.isSubmitting.set(false)))
+   .subscribe({
+    next: (response) => {
+     if (!response.status) {
+      this.showError(response.msg || 'Unable to create portfolio.');
+      return;
+     }
+
+     this.toastService.success(response.msg || 'Portfolio created successfully.');
+     this.gotoPortfolio();
+    },
+
+    error: (error) => {
+     this.showError(error?.error?.msg || 'Unable to create portfolio.');
+    },
+   });
  }
 
- submitPortfolio() {
+ // ==================================================
+ // VALIDATION
+ // ==================================================
+
+ private validateForm(): string | null {
   if (!this.portfolioName.trim()) {
-   this.setFeedback('Portfolio name is required.', 'error');
-   return;
-  }
-  if (!this.userInfo.name?.trim() || !this.userInfo.role?.trim()) {
-   this.setFeedback('User name and role are required.', 'error');
-   return;
-  }
-  if (!this.contactInfo.email?.trim() || !this.contactInfo.mobile_no?.trim()) {
-   this.setFeedback('Email and mobile number are required.', 'error');
-   return;
+   return 'Portfolio name is required.';
   }
 
-  this.isSubmitting = true;
-  const request: PortfolioCreateRequest = {
-   user_id: this.userId,
-   portfolio_name: this.portfolioName,
-   user_info: this.userInfo,
-   services: this.services.length > 0 ? this.services : undefined,
-   projects: this.projects.length > 0 ? this.projects : undefined,
-   contact_info: this.contactInfo
+  if (!this.userInfo.name?.trim()) {
+   return 'User name is required.';
+  }
+
+  if (!this.userInfo.role?.trim()) {
+   return 'User role is required.';
+  }
+
+  if (!this.contactInfo.email?.trim()) {
+   return 'Email is required.';
+  }
+
+  if (!this.contactInfo.mobile_no?.trim()) {
+   return 'Mobile number is required.';
+  }
+
+  return null;
+ }
+
+ // ==================================================
+ // REQUEST
+ // ==================================================
+
+ private buildRequest(userId: string): PortfolioCreateRequest {
+  return {
+   user_id: userId,
+   portfolio_name: this.portfolioName.trim(),
+   user_info: {
+    ...this.userInfo,
+    name: this.userInfo.name.trim(),
+    role: this.userInfo.role.trim(),
+    about: this.userInfo.about?.trim(),
+   },
+   services: this.services.length ? this.services : undefined,
+   projects: this.projects.length ? this.projects : undefined,
+   contact_info: {
+    ...this.contactInfo,
+    mobile_no: this.contactInfo.mobile_no.trim(),
+    email: this.contactInfo.email.trim(),
+    address: this.contactInfo.address?.trim(),
+    alternative_number: this.contactInfo.alternative_number?.trim(),
+    alternative_email: this.contactInfo.alternative_email?.trim(),
+   },
+  };
+ }
+
+ // ==================================================
+ // FORM RESET
+ // ==================================================
+
+ private resetServiceForm(): void {
+  this.newService = {
+   title: '',
+   description: [],
   };
 
-  this.portfolioApi.create(request).subscribe({
-   next: (response) => {
-    this.isSubmitting = false;
-    this.setFeedback('Portfolio created successfully!', 'success');
-    setTimeout(() => {
-     this.gotoPortfolio()
-    }, 2000);
-   },
-   error: (err) => {
-    this.isSubmitting = false;
-    this.setFeedback(`Error: ${err?.error?.msg || 'Failed to create portfolio'}`, 'error');
-   }
-  });
+  this.newServiceDescLine = '';
  }
 
- gotoLogin(): void {
-  this.router.navigate([APP_ROUTES.layout, LAYOUT_ROUTES.login])
+ private resetProjectForm(): void {
+  this.newProject = {
+   title: '',
+   description: '',
+   url: '',
+   tech_stack: [],
+  };
  }
+
+ private resetTechStackForm(): void {
+  this.newTechStack = {
+   cat_name: '',
+   skills: [],
+  };
+
+  this.newTechStackSkill = '';
+ }
+
+ // ==================================================
+ // HELPERS
+ // ==================================================
+
+ private cloneTechStack(techStack?: TechStack[]): TechStack[] | undefined {
+  if (!techStack?.length) {
+   return undefined;
+  }
+
+  return techStack.map((stack) => ({
+   ...stack,
+   skills: [...(stack.skills ?? [])],
+  }));
+ }
+
+ private showError(message: string): void {
+  this.toastService.error(message);
+ }
+
+ // ==================================================
+ // NAVIGATION
+ // ==================================================
+
+ gotoLogin(): void {
+  this.router.navigate([APP_ROUTES.layout, LAYOUT_ROUTES.login]);
+ }
+
  gotoPortfolio(): void {
-  this.router.navigate([APP_ROUTES.layout, LAYOUT_ROUTES.portfolio])
+  this.router.navigate([APP_ROUTES.layout, LAYOUT_ROUTES.portfolio]);
  }
 }
