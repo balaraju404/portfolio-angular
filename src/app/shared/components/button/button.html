@@ -1,7 +1,0 @@
-<button [type]="type()" [disabled]="disabled() || loading()" (click)="handleButtonEvent($event)">
- @if (loading()) {
- <span class="spinner"></span>
- }
-
- <ng-content />
-</button>
