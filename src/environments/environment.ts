@@ -1,4 +1,4 @@
 export const environment = {
  production: true,
- apiUrl: 'https://portfolio-ts-node.vercel.app/api/'
+ apiUrl: 'https://portfolio-node-ts.vercel.app/api/'
 }
