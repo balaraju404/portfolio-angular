@@ -2,6 +2,7 @@ import { Routes } from "@angular/router"
 import { APP_ROUTES } from "./core/constants/route.constant"
 import { guestGuard } from "./core/guards/guest.guard"
 import { authGuard } from "./core/guards/auth.guard"
+import { adminGuard } from "./core/guards/admin.guard"
 
 export const routes: Routes = [
  {
@@ -44,5 +45,12 @@ export const routes: Routes = [
  {
   path: APP_ROUTES.ABOUT,
   loadComponent: () => import("./pages/about/about").then((m) => m.About)
+ },
+
+ /** Admin Pages */
+ {
+  path: APP_ROUTES.SECTIONS,
+  canActivate: [adminGuard],
+  loadComponent: () => import("./pages/sections/sections").then((m) => m.Sections)
  }
 ]

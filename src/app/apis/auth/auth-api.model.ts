@@ -13,9 +13,14 @@ export interface User {
  _id: string;
  name: string;
  email: string;
- role: string;
+ role: UserRoleEnum;
  createdAt: string;
  updatedAt: string;
+}
+
+export enum UserRoleEnum {
+ Admin = "admin",
+ User = "user"
 }
 
 /** REGISTER */

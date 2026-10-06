@@ -49,6 +49,10 @@ export class RouteService {
   return this.router.navigate(["/", APP_ROUTES.ABOUT])
  }
 
+ sections(): Promise<boolean> {
+  return this.router.navigate(["/", APP_ROUTES.SECTIONS])
+ }
+
  navigateTo(path: string): Promise<boolean> {
   return this.router.navigate(["/", path])
  }

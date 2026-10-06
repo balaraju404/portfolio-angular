@@ -6,5 +6,6 @@ export const APP_ROUTES = {
  PROFILE: "profile",
  TEMPLATES: "templates",
  PROJECTS: "projects",
- ABOUT: "about"
+ ABOUT: "about",
+ SECTIONS: "sections"
 } as const

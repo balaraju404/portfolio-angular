@@ -38,20 +38,7 @@
     </button>
 
     @if (isProfileMenuOpen) {
-    <div
-     class="absolute right-0 top-12 z-50 w-48 overflow-hidden rounded-xl border border-slate-200 bg-white py-1 shadow-lg ring-1 ring-black/5">
-     <button type="button" (click)="profile()"
-      class="flex w-full items-center px-4 py-2.5 text-left text-sm font-medium text-slate-700 transition hover:bg-slate-50 hover:text-slate-900">
-      View profile
-     </button>
-
-     <div class="my-1 border-t border-slate-100"></div>
-
-     <button type="button" (click)="logout()"
-      class="flex w-full items-center px-4 py-2.5 text-left text-sm font-medium text-red-600 transition hover:bg-red-50">
-      Logout
-     </button>
-    </div>
+    <app-profile-menu (actionEvent)="handleProfileMentAction($event)" />
     }
    </div>
 
