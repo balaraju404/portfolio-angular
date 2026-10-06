@@ -1,8 +1,8 @@
 import { Component, inject } from "@angular/core"
 import { AsyncPipe } from "@angular/common"
-import { HEADER_TABS } from "../core/constants/header-tabs.constant"
-import { RouteService } from "../core/services/route.service"
-import { APP_NAME } from "../core/constants/constants"
+import { HEADER_TABS } from "../../core/constants/header-tabs.constant"
+import { RouteService } from "../../core/services/route.service"
+import { APP_NAME } from "../../core/constants/constants"
 
 @Component({
  imports: [AsyncPipe],
