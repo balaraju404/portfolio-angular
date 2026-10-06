@@ -2,6 +2,7 @@ import { Component, inject } from "@angular/core"
 import { FormsModule } from "@angular/forms"
 import { AuthApiService } from "../../apis/auth/auth-api.service"
 import { RouteService } from "../../core/services/route.service"
+import { ToastService } from "../../shared/toast/toast.service"
 
 @Component({
  selector: "app-login",
@@ -11,6 +12,7 @@ import { RouteService } from "../../core/services/route.service"
 export class Login {
 
  private readonly authApiService = inject(AuthApiService)
+ private readonly toastService = inject(ToastService)
  readonly routeService = inject(RouteService)
 
  email = ""
@@ -19,11 +21,9 @@ export class Login {
  submitted = false
  isLoading = false
  showPassword = false
- serverError = ""
 
  handleLogin(): void {
   this.submitted = true
-  this.serverError = ""
 
   if (!this.email || !this.isValidEmail() || this.password.length < 6) {
    return
@@ -39,15 +39,16 @@ export class Login {
     this.isLoading = false
 
     if (!success) {
-     this.serverError = message || "Unable to login. Please try again."
+     this.toastService.error(message || "Unable to login. Please try again.")
      return
     }
 
+    this.toastService.success(message)
     this.routeService.home()
    },
    error: error => {
     this.isLoading = false
-    this.serverError = error?.error?.message || "Unable to login. Please check your credentials and try again."
+    this.toastService.error(error?.error?.message || "Unable to login. Please check your credentials and try again.")
    }
   })
  }

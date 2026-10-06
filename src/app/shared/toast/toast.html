@@ -1,0 +1,18 @@
+@for (toast of toastService.toasts(); track toast.id) {
+<div
+ class="pointer-events-auto flex items-start gap-3 rounded-xl border bg-white p-4 shadow-md ring-1 ring-black/5 transition-all"
+ [class]="toastClass[toast.type]" role="alert">
+ <div class="flex size-7 shrink-0 items-center justify-center rounded-full text-xs font-bold"
+  [class]="iconClass[toast.type]" aria-hidden="true">
+  {{ icons[toast.type] }}
+ </div>
+
+ <p class="flex-1 pt-0.5 text-sm leading-5 text-slate-700"> {{ toast.message }} </p>
+
+ <button type="button"
+  class="shrink-0 rounded-md p-1 text-lg leading-none text-slate-400 transition-colors hover:bg-slate-100 hover:text-slate-700 focus:outline-none focus:ring-2 focus:ring-slate-300"
+  aria-label="Dismiss notification" (click)="toastService.dismiss(toast.id)">
+  ×
+ </button>
+</div>
+}
