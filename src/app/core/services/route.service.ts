@@ -1,7 +1,6 @@
 import { inject, Injectable } from "@angular/core"
-import { NavigationEnd, Router } from "@angular/router"
+import { NavigationEnd, Router, UrlTree } from "@angular/router"
 import { filter, map, startWith } from "rxjs"
-
 import { APP_ROUTES } from "../constants/route.constant"
 
 @Injectable({ providedIn: "root" })
@@ -66,5 +65,13 @@ export class RouteService {
 
  back(): void {
   window.history.back()
+ }
+
+ loginUrl(): UrlTree {
+  return this.router.createUrlTree(["/", APP_ROUTES.LOGIN])
+ }
+
+ homeUrl(): UrlTree {
+  return this.router.createUrlTree(["/", APP_ROUTES.HOME])
  }
 }

@@ -1,5 +1,7 @@
 import { Routes } from "@angular/router"
 import { APP_ROUTES } from "./core/constants/route.constant"
+import { guestGuard } from "./core/guards/guest.guard"
+import { authGuard } from "./core/guards/auth.guard"
 
 export const routes: Routes = [
  {
@@ -13,14 +15,17 @@ export const routes: Routes = [
  },
  {
   path: APP_ROUTES.LOGIN,
+  canActivate: [guestGuard],
   loadComponent: () => import("./pages/login/login").then((m) => m.Login)
  },
  {
   path: APP_ROUTES.REGISTER,
+  canActivate: [guestGuard],
   loadComponent: () => import("./pages/register/register").then((m) => m.Register)
  },
  {
   path: APP_ROUTES.PROFILE,
+  canActivate: [authGuard],
   loadComponent: () => import("./pages/profile/profile").then((m) => m.Profile)
  },
  {
