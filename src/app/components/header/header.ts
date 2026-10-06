@@ -1,4 +1,4 @@
-import { Component, inject } from "@angular/core"
+import { Component, computed, inject } from "@angular/core"
 import { AsyncPipe } from "@angular/common"
 import { HEADER_TABS } from "../../core/constants/header-tabs.constant"
 import { RouteService } from "../../core/services/route.service"
@@ -18,6 +18,10 @@ export class Header {
  readonly appName = APP_NAME
  readonly tabs = HEADER_TABS
  readonly currentRoute$ = this.routeService.currentRoute$
+ readonly displayUserName = computed(() => {
+  const name = this.authStore.user()?.name || ""
+  return `${name.at(0)}${name.at(1)}`
+ })
 
  navigate(route: string): void {
   this.routeService.navigateTo(route)

@@ -29,6 +29,10 @@ export class RouteService {
   return this.router.navigate(["/", APP_ROUTES.REGISTER])
  }
 
+ forgotPassword(): Promise<boolean> {
+  return this.router.navigate(["/", APP_ROUTES.FORGOT_PASSWORD])
+ }
+
  profile(): Promise<boolean> {
   return this.router.navigate(["/", APP_ROUTES.PROFILE])
  }

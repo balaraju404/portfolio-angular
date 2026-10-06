@@ -24,6 +24,11 @@ export const routes: Routes = [
   loadComponent: () => import("./pages/register/register").then((m) => m.Register)
  },
  {
+  path: APP_ROUTES.FORGOT_PASSWORD,
+  canActivate: [guestGuard],
+  loadComponent: () => import("./pages/forgot-password/forgot-password").then((m) => m.ForgotPassword)
+ },
+ {
   path: APP_ROUTES.PROFILE,
   canActivate: [authGuard],
   loadComponent: () => import("./pages/profile/profile").then((m) => m.Profile)
