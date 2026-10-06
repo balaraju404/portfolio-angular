@@ -1,6 +1,7 @@
 import { Injectable, inject } from "@angular/core"
-import { Observable } from "rxjs"
+import { Observable, tap } from "rxjs"
 import { ApiService } from "../../core/services/api.service"
+import { AuthStore } from "../../store/auth.store"
 import { API_ENDPOINTS } from "../../core/constants/api-endpoints"
 import { ApiResponse } from "../api.model"
 import { LoginData, LoginRequest, RegisterData, RegisterRequest } from "./auth-api.model"
@@ -8,10 +9,20 @@ import { LoginData, LoginRequest, RegisterData, RegisterRequest } from "./auth-a
 @Injectable({ providedIn: "root" })
 export class AuthApiService implements IAuthApiService {
  private readonly apiService = inject(ApiService)
+ private readonly authStore = inject(AuthStore)
+
  private readonly endpoint = API_ENDPOINTS.AUTH
 
  login(request: LoginRequest): Observable<LoginResponse> {
-  return this.apiService.post<LoginResponse>(this.endpoint.LOGIN, request)
+  return this.apiService
+   .post<LoginResponse>(this.endpoint.LOGIN, request)
+   .pipe(
+    tap((response) => {
+     if (response.data) {
+      this.authStore.login(response.data)
+     }
+    })
+   )
  }
 
  register(request: RegisterRequest): Observable<RegisterResponse> {

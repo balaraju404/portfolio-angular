@@ -3,6 +3,7 @@ import { AsyncPipe } from "@angular/common"
 import { HEADER_TABS } from "../../core/constants/header-tabs.constant"
 import { RouteService } from "../../core/services/route.service"
 import { APP_NAME } from "../../core/constants/constants"
+import { AuthStore } from "../../store/auth.store"
 
 @Component({
  imports: [AsyncPipe],
@@ -12,6 +13,7 @@ import { APP_NAME } from "../../core/constants/constants"
 export class Header {
 
  private readonly routeService = inject(RouteService)
+ readonly authStore = inject(AuthStore)
 
  readonly appName = APP_NAME
  readonly tabs = HEADER_TABS
