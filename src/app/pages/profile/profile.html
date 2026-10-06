@@ -1,1 +1,71 @@
-<p>profile works!</p>
+<div class="min-h-[calc(100vh-4rem)] bg-slate-50">
+ <div class="mx-auto max-w-3xl px-4 py-8 sm:px-6 lg:px-8">
+
+  <!-- Page Header -->
+  <div class="mb-8">
+   <h1 class="text-2xl font-bold tracking-tight text-slate-900">
+    Profile
+   </h1>
+
+   <p class="mt-1 text-sm text-slate-500">
+    Manage your account information.
+   </p>
+  </div>
+
+  <!-- Profile Card -->
+  <div class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+   <!-- Card Header -->
+   <div class="border-b border-slate-200 px-6 py-5 sm:px-8">
+    <h2 class="text-base font-semibold text-slate-900">
+     Personal information
+    </h2>
+
+    <p class="mt-1 text-sm text-slate-500">
+     Update your name and email address.
+    </p>
+   </div>
+
+   <!-- Form -->
+   <form class="space-y-6 px-6 py-6 sm:px-8" (submit)="updateProfile($event)">
+
+    <!-- Name -->
+    <div>
+     <label for="name" class="mb-2 block text-sm font-medium text-slate-700">
+      Name
+     </label>
+
+     <input id="name" name="name" type="text" autocomplete="name" [value]="name()"
+      (input)="name.set($any($event.target).value)"
+      class="block w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20"
+      placeholder="Enter your name" />
+    </div>
+
+    <!-- Email -->
+    <div>
+     <label for="email" class="mb-2 block text-sm font-medium text-slate-700">
+      Email
+     </label>
+
+     <input id="email" name="email" type="email" autocomplete="email"
+      class="block w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 disabled:bg-gray-50 disabled:opacity-70 disabled:cursor-not-allowed"
+      placeholder="Enter your email" [value]="email()" [disabled]="true"
+      (input)="email.set($any($event.target).value)" />
+    </div>
+
+    <!-- Actions -->
+    <div class="flex items-center justify-end border-t border-slate-100 pt-6">
+     <button type="submit" [disabled]="isUpdating()"
+      class="inline-flex items-center justify-center rounded-lg bg-indigo-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50">
+      @if (isUpdating()) {
+      Updating...
+      } @else {
+      Update
+      }
+     </button>
+    </div>
+
+   </form>
+  </div>
+
+ </div>
+</div>

@@ -1,19 +1,23 @@
+@let isProfileMenuOpen = profileMenuOpen();
+
 <header class="sticky top-0 z-50 border-b border-slate-200 bg-white/95 backdrop-blur">
  <div class="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
+
   <!-- Brand -->
-  <button type="button" (click)="home()"
+  <button type="button" (click)="routeService.home()"
    class="flex items-center gap-2 text-lg font-bold tracking-tight text-slate-900">
    <span class="flex h-8 w-8 items-center justify-center rounded-lg bg-indigo-600 text-sm font-bold text-white">
-    {{appName.at(0)}}
+    {{ appName.at(0) }}
    </span>
 
-   <span>{{appName}}</span>
+   <span>{{ appName }}</span>
   </button>
 
   <!-- Navigation -->
   <nav class="hidden items-center gap-1 md:flex">
    @for (tab of tabs; track tab.route) {
    @let isActive = (currentRoute$ | async) === '/' + tab.route;
+
    <button type="button" (click)="navigate(tab.route)" [class.bg-slate-100]="isActive" [class.text-slate-900]="isActive"
     class="rounded-lg px-3 py-2 text-sm font-medium text-slate-600 transition hover:bg-slate-100 hover:text-slate-900">
     {{ tab.label }}
@@ -22,15 +26,37 @@
   </nav>
 
   <!-- Account -->
-  <div class="flex items-center gap-3">
+  <div class="relative flex items-center gap-3">
    @if (authStore.isLoggedIn()) {
-   <button type="button" (click)="profile()"
-    class="flex h-9 w-9 items-center justify-center rounded-full bg-slate-900 text-sm font-semibold text-white uppercase transition hover:bg-slate-700"
-    aria-label="Profile">
-    {{displayUserName()}}
-   </button>
-   }@else {
-   <button type="button" (click)="login()"
+
+   <!-- Avatar + Popover -->
+   <div class="relative" appOutsideClick (outsideClick)="closeProfileMenu()">
+    <button type="button" (click)="toggleProfileMenu()"
+     class="flex h-9 w-9 items-center justify-center rounded-full bg-slate-900 text-sm font-semibold uppercase text-white transition hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+     aria-label="Profile menu" [attr.aria-expanded]="isProfileMenuOpen">
+     {{ displayUserName() }}
+    </button>
+
+    @if (isProfileMenuOpen) {
+    <div
+     class="absolute right-0 top-12 z-50 w-48 overflow-hidden rounded-xl border border-slate-200 bg-white py-1 shadow-lg ring-1 ring-black/5">
+     <button type="button" (click)="profile()"
+      class="flex w-full items-center px-4 py-2.5 text-left text-sm font-medium text-slate-700 transition hover:bg-slate-50 hover:text-slate-900">
+      View profile
+     </button>
+
+     <div class="my-1 border-t border-slate-100"></div>
+
+     <button type="button" (click)="logout()"
+      class="flex w-full items-center px-4 py-2.5 text-left text-sm font-medium text-red-600 transition hover:bg-red-50">
+      Logout
+     </button>
+    </div>
+    }
+   </div>
+
+   } @else {
+   <button type="button" (click)="routeService.login()"
     class="hidden text-sm font-medium text-slate-600 hover:text-slate-900 sm:block">
     Login
    </button>

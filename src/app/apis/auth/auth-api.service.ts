@@ -5,11 +5,13 @@ import { AuthStore } from "../../store/auth.store"
 import { API_ENDPOINTS } from "../../core/constants/api-endpoints"
 import { ApiResponse } from "../api.model"
 import { LoginData, LoginRequest, RegisterData, RegisterRequest } from "./auth-api.model"
+import { RouteService } from "../../core/services/route.service"
 
 @Injectable({ providedIn: "root" })
 export class AuthApiService implements IAuthApiService {
  private readonly apiService = inject(ApiService)
  private readonly authStore = inject(AuthStore)
+ private readonly routeService = inject(RouteService)
 
  private readonly endpoint = API_ENDPOINTS.AUTH
 
@@ -27,6 +29,11 @@ export class AuthApiService implements IAuthApiService {
 
  register(request: RegisterRequest): Observable<RegisterResponse> {
   return this.apiService.post<RegisterResponse>(this.endpoint.REGISTER, request)
+ }
+
+ logout() {
+  this.authStore.logout()
+  this.routeService.login()
  }
 }
 
